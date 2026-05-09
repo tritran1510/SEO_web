@@ -200,6 +200,11 @@ textarea {
   gap: 18px;
 }
 
+.form-grid > .field,
+.form-grid > .keyword-inline-field {
+  align-self: start;
+}
+
 .form-grid__full {
   grid-column: 1 / -1;
 }
