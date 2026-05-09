@@ -1,0 +1,187 @@
+export const en = {
+  translation: {
+    common: {
+      actions: {
+        remove: "Remove",
+      },
+      status: {
+        ready: "Ready",
+      },
+      language: {
+        label: "Language",
+        vietnamese: "Tiếng Việt",
+        english: "English",
+      },
+    },
+    seoReview: {
+      hero: {
+        eyebrow: "SEO Workspace",
+        title: "SEO Content Review Screen",
+        lead:
+          "This page collects article content, SEO metadata, and imported images, then sends the full payload to the backend reviewer API. The frontend handles input and rendering, while scoring is computed by the backend service.",
+        integrationEyebrow: "Integration status",
+        integrationHint:
+          "This screen is connected to the backend API. After editing content, run review again to get fresh results from the server.",
+      },
+      status: {
+        good: "Good",
+        needsImprovement: "Needs improvement",
+        poor: "Poor",
+      },
+      navigation: {
+        createReview: "Create review",
+        reviewHistory: "Review history",
+      },
+      form: {
+        articleInputEyebrow: "Article input",
+        coreContentTitle: "Core content",
+        keywordSetEyebrow: "Keyword set",
+        seoMetadataTitle: "SEO metadata",
+        runReview: "Run SEO review",
+        reviewing: "Reviewing...",
+      },
+      report: {
+        snapshotEyebrow: "Result snapshot",
+        readinessTitle: "SEO readiness",
+        topImprovementsEyebrow: "Top improvements",
+        nextActionsTitle: "Next actions for editor",
+        noUrgentFixes: "This draft is in decent shape. No urgent SEO issues are highlighted right now.",
+        emptyState: "No review result yet. Run a review to see checklist scores and recommendations.",
+        highlightedInputsEyebrow: "Highlighted inputs",
+        fieldsNeedImprovementTitle: "Fields that need improvement",
+        allClearTitle: "All clear",
+        allClearDescription: "No input fields are currently flagged for improvement.",
+      },
+      score: {
+        overallTitle: "Overall score",
+        seoTitle: "SEO score",
+        readabilityTitle: "Readability score",
+        strong: "Strong",
+        promising: "Promising",
+        needsWork: "Needs work",
+      },
+      checklist: {
+        result: {
+          pass: "Pass",
+          needsWork: "Needs work",
+        },
+        passedCount: "{{count}} checks passed",
+        groups: {
+          seo: "SEO checks",
+          advanced: "Advanced checks",
+          readability: "Readability checks",
+        },
+      },
+      fields: {
+        articleTitle: {
+          label: "Article title",
+          placeholder: "Enter the article title",
+          helperText: "Write a clear title and naturally include the primary keyword.",
+        },
+        permanentLink: {
+          label: "Permanent link",
+          placeholder: "https://example.com/article-slug",
+          helperText: "Use a full URL and keep it aligned with the slug field.",
+        },
+        articleContent: {
+          label: "Article content",
+          placeholder: "Paste the full article content",
+          helperText: "This content is sent directly to the backend API for review.",
+        },
+        contentImages: {
+          label: "Content images",
+          helperText: "Add images relevant to the article to improve contextual quality.",
+        },
+        detailedInformation: {
+          label: "Detailed information",
+          placeholder: "Add context, notes, or supporting information for the article",
+          helperText: "Include reader context, audience, or editorial constraints.",
+        },
+        summary: {
+          label: "Summary",
+          placeholder: "Write a short article summary",
+          helperText: "Keep it concise and aligned with the target search intent.",
+        },
+        seoTitle: {
+          label: "SEO title",
+          placeholder: "SEO title",
+          helperText: "Keep it around 45-65 characters and place the primary keyword near the front.",
+        },
+        slug: {
+          label: "Slug",
+          placeholder: "seo-friendly-slug",
+          helperText: "Use lowercase words, hyphens, and a short topic-focused slug.",
+        },
+        metaDescription: {
+          label: "Meta description",
+          placeholder: "Description shown in search results",
+          helperText: "Write 120-160 characters, include core benefit and one primary keyword mention.",
+        },
+        primaryKeyword: {
+          label: "Primary keyword",
+          placeholder: "Main target keyphrase",
+          helperText: "Choose one keyphrase that best represents the search goal of this article.",
+        },
+        secondaryKeywords: {
+          label: "Secondary keywords",
+          placeholder: "Keywords separated by commas",
+          helperText: "Use commas to separate supporting keyphrases.",
+        },
+        synonyms: {
+          label: "Synonyms",
+          placeholder: "Synonym phrases separated by commas",
+          helperText: "These phrases help semantic coverage in premium-style checks.",
+        },
+      },
+      imageInput: {
+        ariaLabel: "Content image input area",
+        title: "Paste or drop images here",
+        description:
+          "Click this area and paste screenshots or copied images, similar to your editorial workflow. You can also choose image files manually.",
+        chooseFiles: "Choose image files",
+        chooseFilesAria: "Choose images for content",
+      },
+      history: {
+        articleTimelineEyebrow: "Article timeline",
+        reviewHistoryTitle: "Review history detail",
+        backToList: "Back to list",
+        loadingData: "Loading data...",
+        totalReviews: "Total reviews",
+        reviewAtTime: "Time",
+        viewDetail: "View detail",
+        previous: "Prev",
+        next: "Next",
+        page: "Page {{current}}/{{total}}",
+        reviewSnapshotEyebrow: "Review snapshot",
+        backToHistory: "Back to history",
+        status: "Status",
+        notes: "Notes",
+      },
+      reviewedArticles: {
+        eyebrow: "Review history",
+        title: "Reviewed articles",
+        loadingData: "Loading data...",
+        emptyState: "No reviewed articles yet.",
+        primaryKeyword: "Primary keyword",
+        totalReviews: "Total reviews",
+        viewHistory: "View history",
+        previous: "Prev",
+        next: "Next",
+        page: "Page {{current}}/{{total}}",
+      },
+      errors: {
+        reviewFailed: "Could not generate the SEO review.",
+        invalidPayload: "Invalid review payload.",
+        articleTitleRequired: "Article title is required.",
+        permanentLinkRequired: "Permanent link is required.",
+        articleContentRequired: "Article content is required.",
+        summaryRequired: "Summary is required.",
+        primaryKeywordRequired: "Primary keyword is required.",
+        imageOnly: "Only image files are allowed. Upload or paste image files from your clipboard.",
+        imageReadFailed: "One or more images could not be read. Please try again.",
+        reviewHistoryLoadFailed: "Could not load review history.",
+        reviewedArticlesLoadFailed: "Could not load reviewed articles.",
+      },
+    },
+  },
+} as const;

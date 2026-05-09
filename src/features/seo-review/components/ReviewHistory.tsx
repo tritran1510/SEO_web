@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { useTranslation } from "react-i18next";
 import { fetchReviewHistory } from "../api/reviewApi";
 import type { ReviewHistoryItem, ReviewHistoryResponse } from "../model/types";
 
@@ -9,6 +10,7 @@ type ReviewHistoryProps = {
 };
 
 export function ReviewHistory({ articleId, onBackToList, onOpenReviewDetail }: ReviewHistoryProps) {
+  const { t } = useTranslation();
   const [data, setData] = useState<ReviewHistoryResponse | null>(null);
   const [page, setPage] = useState(1);
   const [pageSize] = useState(20);
@@ -28,7 +30,7 @@ export function ReviewHistory({ articleId, onBackToList, onOpenReviewDetail }: R
       })
       .catch((err: unknown) => {
         if (active) {
-          setError(err instanceof Error ? err.message : "Failed to load review history.");
+          setError(err instanceof Error ? err.message : t("seoReview.errors.reviewHistoryLoadFailed"));
         }
       })
       .finally(() => {
@@ -46,15 +48,15 @@ export function ReviewHistory({ articleId, onBackToList, onOpenReviewDetail }: R
     <section className="panel panel--highlight">
       <div className="panel__header">
         <div>
-          <p className="eyebrow">Lich su theo bai viet / Article timeline</p>
-          <h2>Chi tiet cac lan review / Review history detail</h2>
+          <p className="eyebrow">{t("seoReview.history.articleTimelineEyebrow")}</p>
+          <h2>{t("seoReview.history.reviewHistoryTitle")}</h2>
         </div>
         <button type="button" className="ghost-button" onClick={onBackToList}>
-          Quay lai danh sach / Back to list
+          {t("seoReview.history.backToList")}
         </button>
       </div>
 
-      {loading ? <p className="panel__empty">Dang tai du lieu... / Loading data...</p> : null}
+      {loading ? <p className="panel__empty">{t("seoReview.history.loadingData")}</p> : null}
       {error ? <p className="panel__error">{error}</p> : null}
 
       {data ? (
@@ -64,7 +66,7 @@ export function ReviewHistory({ articleId, onBackToList, onOpenReviewDetail }: R
             <p className="history-meta">Slug: {data.article.slug}</p>
             <p className="history-meta">URL: {data.article.permanent_link}</p>
             <p className="history-meta">
-              Tong review / Total reviews: <strong>{data.summary.total_reviews}</strong>
+              {t("seoReview.history.totalReviews")}: <strong>{data.summary.total_reviews}</strong>
             </p>
           </article>
 
@@ -73,7 +75,7 @@ export function ReviewHistory({ articleId, onBackToList, onOpenReviewDetail }: R
               <article key={review.review_id} className="history-card">
                 <h3>Review #{review.review_id}</h3>
                 <p className="history-meta">
-                  Thoi gian / Time: {new Date(review.created_at).toLocaleString()}
+                  {t("seoReview.history.reviewAtTime")}: {new Date(review.created_at).toLocaleString()}
                 </p>
                 <div className="history-score-grid">
                   <span>Overall: {review.overall_score ?? "-"}</span>
@@ -86,7 +88,7 @@ export function ReviewHistory({ articleId, onBackToList, onOpenReviewDetail }: R
                   className="primary-button"
                   onClick={() => onOpenReviewDetail(data, review)}
                 >
-                  Xem chi tiet / View detail
+                  {t("seoReview.history.viewDetail")}
                 </button>
               </article>
             ))}
@@ -99,10 +101,13 @@ export function ReviewHistory({ articleId, onBackToList, onOpenReviewDetail }: R
               onClick={() => setPage((current) => Math.max(1, current - 1))}
               disabled={page <= 1 || loading}
             >
-              Truoc / Prev
+              {t("seoReview.history.previous")}
             </button>
             <span>
-              Trang / Page {page}/{Math.max(1, data.pagination.totalPages)}
+              {t("seoReview.history.page", {
+                current: page,
+                total: Math.max(1, data.pagination.totalPages),
+              })}
             </span>
             <button
               type="button"
@@ -112,7 +117,7 @@ export function ReviewHistory({ articleId, onBackToList, onOpenReviewDetail }: R
               }
               disabled={page >= Math.max(1, data.pagination.totalPages) || loading}
             >
-              Sau / Next
+              {t("seoReview.history.next")}
             </button>
           </div>
         </>
@@ -128,29 +133,37 @@ type ReviewDetailProps = {
 };
 
 export function ReviewDetail({ history, review, onBack }: ReviewDetailProps) {
+  const { t } = useTranslation();
+
   return (
     <section className="panel panel--highlight">
       <div className="panel__header">
         <div>
-          <p className="eyebrow">Chi tiet lan review / Review snapshot</p>
+          <p className="eyebrow">{t("seoReview.history.reviewSnapshotEyebrow")}</p>
           <h2>{history.article.title}</h2>
         </div>
         <button type="button" className="ghost-button" onClick={onBack}>
-          Quay lai lich su / Back to history
+          {t("seoReview.history.backToHistory")}
         </button>
       </div>
 
       <article className="history-card">
         <h3>Review #{review.review_id}</h3>
-        <p className="history-meta">Thoi gian / Time: {new Date(review.created_at).toLocaleString()}</p>
-        <p className="history-meta">Status: {review.status ?? "-"}</p>
+        <p className="history-meta">
+          {t("seoReview.history.reviewAtTime")}: {new Date(review.created_at).toLocaleString()}
+        </p>
+        <p className="history-meta">
+          {t("seoReview.history.status")}: {review.status ?? "-"}
+        </p>
         <div className="history-score-grid">
           <span>Overall: {review.overall_score ?? "-"}</span>
           <span>SEO: {review.seo_score ?? "-"}</span>
           <span>Readability: {review.readability_score ?? "-"}</span>
           <span>Advanced: {review.advanced_score ?? "-"}</span>
         </div>
-        <p className="history-meta">Notes: {review.notes || "-"}</p>
+        <p className="history-meta">
+          {t("seoReview.history.notes")}: {review.notes || "-"}
+        </p>
       </article>
     </section>
   );

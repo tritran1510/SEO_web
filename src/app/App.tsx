@@ -1,5 +1,6 @@
 import { useTranslation } from "react-i18next";
 import { useState } from "react";
+import { switchLanguage } from "./i18n/i18n";
 import { SeoReviewForm } from "../features/seo-review/components/SeoReviewForm";
 import { SeoReviewReport } from "../features/seo-review/components/SeoReviewReport";
 import {
@@ -13,7 +14,7 @@ import { useSeoReviewWorkspace } from "../features/seo-review/model/useSeoReview
 type ViewMode = "review-workspace" | "reviewed-articles" | "article-history" | "review-detail";
 
 function App() {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
   const workspace = useSeoReviewWorkspace();
   const [view, setView] = useState<ViewMode>("review-workspace");
   const [selectedArticleId, setSelectedArticleId] = useState<number | null>(null);
@@ -22,18 +23,39 @@ function App() {
 
   return (
     <div className="shell">
+      <div className="shell__topbar">
+        <div className="language-switcher" role="group" aria-label={t("common.language.label")}>
+          <span className="language-switcher__label">{t("common.language.label")}</span>
+          <button
+            type="button"
+            className={`language-switcher__button ${i18n.language === "vi" ? "language-switcher__button--active" : ""}`}
+            aria-label={t("common.language.vietnamese")}
+            title={t("common.language.vietnamese")}
+            onClick={() => {
+              void switchLanguage("vi");
+            }}
+          >
+            🇻🇳
+          </button>
+          <button
+            type="button"
+            className={`language-switcher__button ${i18n.language === "en" ? "language-switcher__button--active" : ""}`}
+            aria-label={t("common.language.english")}
+            title={t("common.language.english")}
+            onClick={() => {
+              void switchLanguage("en");
+            }}
+          >
+            🇬🇧
+          </button>
+        </div>
+      </div>
+
       <header className="hero">
         <div className="hero__copy">
           <p className="eyebrow">{t("seoReview.hero.eyebrow")}</p>
           <h1>{t("seoReview.hero.title")}</h1>
           <p className="hero__lead">{t("seoReview.hero.lead")}</p>
-        </div>
-        <div className="hero__status">
-          <p className="eyebrow">{t("seoReview.hero.integrationEyebrow")}</p>
-          <h2 className={`status status--${workspace.report?.status?.replace(/\s+/g, "-") ?? "good"}`}>
-            {workspace.statusLabel}
-          </h2>
-          <p>{t("seoReview.hero.integrationHint")}</p>
         </div>
       </header>
 
@@ -43,14 +65,14 @@ function App() {
           className={`ghost-button ${view === "review-workspace" ? "view-switcher__active" : ""}`}
           onClick={() => setView("review-workspace")}
         >
-          Tao review / Create review
+          {t("seoReview.navigation.createReview")}
         </button>
         <button
           type="button"
           className={`ghost-button ${view !== "review-workspace" ? "view-switcher__active" : ""}`}
           onClick={() => setView("reviewed-articles")}
         >
-          Lich su review / Review history
+          {t("seoReview.navigation.reviewHistory")}
         </button>
       </div>
 

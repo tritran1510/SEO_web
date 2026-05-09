@@ -158,24 +158,28 @@ export function SeoReviewForm({ workspace }: SeoReviewFormProps) {
               issues={metaDescriptionField.issues}
             />
           </div>
-          <Field
-            label={t("seoReview.fields.primaryKeyword.label")}
-            value={form.keywordSet.primaryKeyword}
-            onChange={(event) => workspace.updateKeywordField("primaryKeyword", event.target.value)}
-            placeholder={t("seoReview.fields.primaryKeyword.placeholder")}
-            helperText={t("seoReview.fields.primaryKeyword.helperText")}
-            tone={primaryKeywordField.tone}
-            issues={primaryKeywordField.issues}
-          />
-          <Field
-            label={t("seoReview.fields.secondaryKeywords.label")}
-            value={form.keywordSet.secondaryKeywords}
-            onChange={(event) => workspace.updateKeywordField("secondaryKeywords", event.target.value)}
-            placeholder={t("seoReview.fields.secondaryKeywords.placeholder")}
-            helperText={t("seoReview.fields.secondaryKeywords.helperText")}
-            tone={secondaryKeywordsField.tone}
-            issues={secondaryKeywordsField.issues}
-          />
+          <div className="keyword-inline-field">
+            <Field
+              label={t("seoReview.fields.primaryKeyword.label")}
+              value={form.keywordSet.primaryKeyword}
+              onChange={(event) => workspace.updateKeywordField("primaryKeyword", event.target.value)}
+              placeholder={t("seoReview.fields.primaryKeyword.placeholder")}
+              helperText={t("seoReview.fields.primaryKeyword.helperText")}
+              tone={primaryKeywordField.tone}
+              issues={primaryKeywordField.issues}
+            />
+          </div>
+          <div className="keyword-inline-field">
+            <Field
+              label={t("seoReview.fields.secondaryKeywords.label")}
+              value={form.keywordSet.secondaryKeywords}
+              onChange={(event) => workspace.updateKeywordField("secondaryKeywords", event.target.value)}
+              placeholder={t("seoReview.fields.secondaryKeywords.placeholder")}
+              helperText={t("seoReview.fields.secondaryKeywords.helperText")}
+              tone={secondaryKeywordsField.tone}
+              issues={secondaryKeywordsField.issues}
+            />
+          </div>
           <div className="form-grid__full">
             <Field
               label={t("seoReview.fields.synonyms.label")}
