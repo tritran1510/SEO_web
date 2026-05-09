@@ -109,7 +109,7 @@ export type ReviewedArticleItem = {
   slug: string;
   permanent_link: string;
   primary_keyword: string | null;
-  latest_review_id: number | null;
+  latest_review_id: string | null;
   latest_overall_score: number | null;
   latest_seo_score: number | null;
   latest_readability_score: number | null;
@@ -129,7 +129,7 @@ export type ReviewedArticlesResponse = {
 };
 
 export type ReviewHistoryItem = {
-  review_id: number;
+  review_id: string;
   created_at: string;
   overall_score: number | null;
   seo_score: number | null;

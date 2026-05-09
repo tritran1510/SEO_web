@@ -204,15 +204,21 @@ export function ReviewDetail({ history, review, onBack }: ReviewDetailProps) {
       ? reviewRecord.checklistResults
       : []) as Array<Record<string, unknown>>;
 
-  const hasExtraDetails =
+  const hasSeoMetadata =
     Boolean(seoTitle) ||
     Boolean(metaDescription) ||
     Boolean(primaryKeyword) ||
     secondaryKeywords.length > 0 ||
-    synonyms.length > 0 ||
+    synonyms.length > 0;
+
+  const hasReviewedContent =
     Boolean(summary) ||
     Boolean(detailedInformation) ||
-    Boolean(articleContent) ||
+    Boolean(articleContent);
+
+  const hasExtraDetails =
+    hasSeoMetadata ||
+    hasReviewedContent ||
     recommendations.length > 0 ||
     checklist.length > 0;
 
@@ -312,76 +318,80 @@ export function ReviewDetail({ history, review, onBack }: ReviewDetailProps) {
           </p>
         </article>
 
-        <article className="history-card history-card--full">
-          <h3>{t("seoReview.history.seoMetadataTitle")}</h3>
-          <div className="history-detail-grid">
-            <p className="history-meta">
-              <strong>{t("seoReview.history.seoTitle")}:</strong> {seoTitle || "-"}
-            </p>
-            <p className="history-meta">
-              <strong>{t("seoReview.history.metaDescription")}:</strong> {metaDescription || "-"}
-            </p>
-            <p className="history-meta">
-              <strong>{t("seoReview.history.primaryKeyword")}:</strong> {primaryKeyword || "-"}
-            </p>
-            <div>
+        {hasSeoMetadata ? (
+          <article className="history-card history-card--full">
+            <h3>{t("seoReview.history.seoMetadataTitle")}</h3>
+            <div className="history-detail-grid">
               <p className="history-meta">
-                <strong>{t("seoReview.history.secondaryKeywords")}:</strong>
+                <strong>{t("seoReview.history.seoTitle")}:</strong> {seoTitle || "-"}
               </p>
-              {secondaryKeywords.length > 0 ? (
-                <div className="history-chip-list">
-                  {secondaryKeywords.map((keyword) => (
-                    <span key={keyword} className="history-chip">
-                      {keyword}
-                    </span>
-                  ))}
-                </div>
-              ) : (
-                <p className="history-meta">-</p>
-              )}
-            </div>
-            <div>
               <p className="history-meta">
-                <strong>{t("seoReview.history.synonyms")}:</strong>
+                <strong>{t("seoReview.history.metaDescription")}:</strong> {metaDescription || "-"}
               </p>
-              {synonyms.length > 0 ? (
-                <div className="history-chip-list">
-                  {synonyms.map((keyword) => (
-                    <span key={keyword} className="history-chip">
-                      {keyword}
-                    </span>
-                  ))}
-                </div>
-              ) : (
-                <p className="history-meta">-</p>
-              )}
+              <p className="history-meta">
+                <strong>{t("seoReview.history.primaryKeyword")}:</strong> {primaryKeyword || "-"}
+              </p>
+              <div>
+                <p className="history-meta">
+                  <strong>{t("seoReview.history.secondaryKeywords")}:</strong>
+                </p>
+                {secondaryKeywords.length > 0 ? (
+                  <div className="history-chip-list">
+                    {secondaryKeywords.map((keyword) => (
+                      <span key={keyword} className="history-chip">
+                        {keyword}
+                      </span>
+                    ))}
+                  </div>
+                ) : (
+                  <p className="history-meta">-</p>
+                )}
+              </div>
+              <div>
+                <p className="history-meta">
+                  <strong>{t("seoReview.history.synonyms")}:</strong>
+                </p>
+                {synonyms.length > 0 ? (
+                  <div className="history-chip-list">
+                    {synonyms.map((keyword) => (
+                      <span key={keyword} className="history-chip">
+                        {keyword}
+                      </span>
+                    ))}
+                  </div>
+                ) : (
+                  <p className="history-meta">-</p>
+                )}
+              </div>
             </div>
-          </div>
-        </article>
+          </article>
+        ) : null}
 
-        <article className="history-card history-card--full">
-          <h3>{t("seoReview.history.reviewedContentTitle")}</h3>
-          <div className="history-detail-grid">
-            <div>
-              <p className="history-meta">
-                <strong>{t("seoReview.history.summary")}:</strong>
-              </p>
-              <p className="history-block">{summary || "-"}</p>
+        {hasReviewedContent ? (
+          <article className="history-card history-card--full">
+            <h3>{t("seoReview.history.reviewedContentTitle")}</h3>
+            <div className="history-detail-grid">
+              <div>
+                <p className="history-meta">
+                  <strong>{t("seoReview.history.summary")}:</strong>
+                </p>
+                <p className="history-block">{summary || "-"}</p>
+              </div>
+              <div>
+                <p className="history-meta">
+                  <strong>{t("seoReview.history.detailedInformation")}:</strong>
+                </p>
+                <p className="history-block">{detailedInformation || "-"}</p>
+              </div>
+              <div>
+                <p className="history-meta">
+                  <strong>{t("seoReview.history.articleContent")}:</strong>
+                </p>
+                <p className="history-block">{articleContent || "-"}</p>
+              </div>
             </div>
-            <div>
-              <p className="history-meta">
-                <strong>{t("seoReview.history.detailedInformation")}:</strong>
-              </p>
-              <p className="history-block">{detailedInformation || "-"}</p>
-            </div>
-            <div>
-              <p className="history-meta">
-                <strong>{t("seoReview.history.articleContent")}:</strong>
-              </p>
-              <p className="history-block">{articleContent || "-"}</p>
-            </div>
-          </div>
-        </article>
+          </article>
+        ) : null}
 
         {recommendations.length > 0 ? (
           <article className="history-card history-card--full">
