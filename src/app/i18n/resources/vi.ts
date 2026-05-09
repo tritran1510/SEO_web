@@ -1,0 +1,259 @@
+export const vi = {
+  translation: {
+    common: {
+      actions: {
+        remove: "Xóa",
+      },
+      status: {
+        ready: "Sẵn sàng",
+      },
+    },
+    seoReview: {
+      hero: {
+        eyebrow: "Không gian SEO",
+        title: "Màn hình đánh giá nội dung SEO",
+        lead:
+          "Trang này gom nội dung bài viết, metadata SEO và hình ảnh nhập vào, rồi gửi toàn bộ payload sang API reviewer ở backend. Frontend chỉ điều phối nhập liệu và hiển thị kết quả, còn phần chấm điểm nằm ở service backend.",
+        integrationEyebrow: "Trạng thái tích hợp",
+        integrationHint:
+          "Trang đã được map với API backend. Sau khi chỉnh nội dung, hãy chạy lại đánh giá để lấy kết quả mới từ server.",
+      },
+      status: {
+        good: "Tốt",
+        needsImprovement: "Cần cải thiện",
+        poor: "Yếu",
+      },
+      form: {
+        articleInputEyebrow: "Dữ liệu bài viết",
+        coreContentTitle: "Nội dung chính",
+        keywordSetEyebrow: "Bộ từ khóa",
+        seoMetadataTitle: "Metadata SEO",
+        runReview: "Chạy đánh giá SEO",
+        reviewing: "Đang đánh giá...",
+      },
+      report: {
+        snapshotEyebrow: "Tóm tắt kết quả",
+        readinessTitle: "Mức sẵn sàng SEO",
+        topImprovementsEyebrow: "Ưu tiên cải thiện",
+        nextActionsTitle: "Hành động tiếp theo cho biên tập viên",
+        noUrgentFixes:
+          "Bản nháp hiện đang ở trạng thái khá tốt. Chưa có vấn đề SEO khẩn cấp nào được tô sáng lúc này.",
+        emptyState:
+          "Chưa có kết quả đánh giá. Hãy chạy review để xem checklist và điểm số.",
+        highlightedInputsEyebrow: "Điểm cần chú ý",
+        fieldsNeedImprovementTitle: "Các trường cần cải thiện",
+        allClearTitle: "Ổn",
+        allClearDescription: "Hiện chưa có trường nhập liệu nào bị gắn cờ cần chỉnh sửa.",
+      },
+      score: {
+        overallTitle: "Điểm tổng quan",
+        seoTitle: "Điểm SEO",
+        readabilityTitle: "Điểm dễ đọc",
+        strong: "Tốt",
+        promising: "Khá ổn",
+        needsWork: "Cần cải thiện",
+      },
+      checklist: {
+        result: {
+          pass: "Đạt",
+          needsWork: "Cần cải thiện",
+        },
+        passedCount: "{{count}} tiêu chí đạt",
+        groups: {
+          seo: "Kiểm tra SEO",
+          advanced: "Kiểm tra từ khóa nâng cao",
+          readability: "Kiểm tra độ dễ đọc",
+        },
+      },
+      fields: {
+        articleTitle: {
+          label: "Tiêu đề bài viết",
+          placeholder: "Nhập tiêu đề bài viết",
+        },
+        permanentLink: {
+          label: "Liên kết cố định",
+          placeholder: "https://example.com/duong-dan-bai-viet",
+        },
+        articleContent: {
+          label: "Nội dung bài viết",
+          placeholder: "Dán toàn bộ nội dung bài viết",
+          helperText: "Nội dung này sẽ được gửi trực tiếp sang API backend để đánh giá.",
+        },
+        contentImages: {
+          label: "Hình ảnh nội dung",
+        },
+        detailedInformation: {
+          label: "Thông tin chi tiết",
+          placeholder: "Bổ sung bối cảnh, ghi chú hoặc thông tin hỗ trợ cho bài viết",
+        },
+        summary: {
+          label: "Tóm tắt",
+          placeholder: "Viết phần tóm tắt ngắn cho bài viết",
+        },
+        seoTitle: {
+          label: "Tiêu đề SEO",
+          placeholder: "Tiêu đề dùng cho SEO",
+        },
+        slug: {
+          label: "Slug",
+          placeholder: "slug-than-thien-voi-seo",
+        },
+        metaDescription: {
+          label: "Meta description",
+          placeholder: "Mô tả hiển thị trên kết quả tìm kiếm",
+        },
+        primaryKeyword: {
+          label: "Từ khóa chính",
+          placeholder: "Cụm từ khóa trọng tâm",
+        },
+        secondaryKeywords: {
+          label: "Từ khóa phụ",
+          placeholder: "Các từ khóa, ngăn cách bằng dấu phẩy",
+          helperText: "Dùng dấu phẩy để tách các từ khóa hỗ trợ.",
+        },
+        synonyms: {
+          label: "Từ đồng nghĩa",
+          placeholder: "Các cụm từ đồng nghĩa, ngăn cách bằng dấu phẩy",
+          helperText: "Các cụm này hỗ trợ đánh giá ngữ nghĩa theo kiểu premium.",
+        },
+      },
+      imageInput: {
+        ariaLabel: "Khu vực nhập hình ảnh nội dung",
+        title: "Dán hoặc thả ảnh vào đây",
+        description:
+          "Nhấp vào khu vực này rồi dán screenshot hoặc ảnh đã copy giống như khi bạn soạn nội dung trong trình biên tập. Bạn cũng có thể chọn tệp thủ công.",
+        chooseFiles: "Chọn tệp hình ảnh",
+        chooseFilesAria: "Chọn hình ảnh cho nội dung",
+      },
+      errors: {
+        reviewFailed: "Không thể tạo kết quả đánh giá SEO.",
+        invalidPayload: "Dữ liệu gửi sang API không hợp lệ.",
+        articleTitleRequired: "Tiêu đề bài viết là bắt buộc.",
+        permanentLinkRequired: "Liên kết cố định là bắt buộc.",
+        articleContentRequired: "Nội dung bài viết là bắt buộc.",
+        summaryRequired: "Phần tóm tắt là bắt buộc.",
+        primaryKeywordRequired: "Từ khóa chính là bắt buộc.",
+        imageOnly:
+          "Chỉ thêm tệp hình ảnh. Bạn có thể tải ảnh lên hoặc dán trực tiếp từ clipboard.",
+        imageReadFailed: "Có một hoặc nhiều ảnh không thể đọc được. Vui lòng thử lại.",
+      },
+      checks: {
+        seoTitleContainsPrimaryKeyword: {
+          name: "Tiêu đề SEO chứa từ khóa chính",
+          reason: "Tiêu đề SEO nên nhấn mạnh cụm từ tìm kiếm trọng tâm.",
+          improvement: "Thêm từ khóa chính vào gần đầu tiêu đề SEO.",
+        },
+        seoTitleLengthStrong: {
+          name: "Độ dài tiêu đề SEO nằm trong khoảng tốt",
+          reason: "Tiêu đề SEO cần đủ gọn để hiển thị tốt trên kết quả tìm kiếm.",
+          improvement: "Giữ tiêu đề SEO trong khoảng 45 đến 65 ký tự.",
+        },
+        titleContainsPrimaryKeyword: {
+          name: "Tiêu đề bài viết chứa từ khóa chính",
+          reason: "Tiêu đề bài viết nên bám sát từ khóa chính để khớp ý định tìm kiếm.",
+          improvement: "Chèn từ khóa chính một cách tự nhiên vào tiêu đề bài viết.",
+        },
+        slugShortAndClear: {
+          name: "Slug ngắn gọn và rõ nghĩa",
+          reason: "Slug nên dễ đọc và có chứa cụm từ khóa trọng tâm.",
+          improvement: "Giữ slug ngắn gọn và có chứa từ khóa chính ở dạng gạch nối.",
+        },
+        permanentLinkUsesSlug: {
+          name: "Liên kết cố định dùng đúng slug đã chọn",
+          reason: "Liên kết cố định nên đồng bộ với slug SEO để tránh lệch hướng tối ưu.",
+          improvement: "Cập nhật liên kết cố định để dùng cùng slug sạch với trường SEO.",
+        },
+        metaDescriptionLengthValid: {
+          name: "Meta description có độ dài hợp lý",
+          reason: "Meta description nên vừa khung hiển thị và có chứa cụm từ khóa mục tiêu.",
+          improvement: "Giữ meta description trong khoảng 120 đến 160 ký tự và chèn từ khóa chính một lần.",
+        },
+        primaryKeywordInIntroduction: {
+          name: "Từ khóa chính xuất hiện ở phần mở bài",
+          reason: "Phần mở đầu nên xác lập chủ đề bài viết càng sớm càng tốt.",
+          improvement: "Đưa từ khóa chính vào ngay đoạn mở đầu của bài viết.",
+        },
+        primaryKeywordInHeadings: {
+          name: "Từ khóa chính xuất hiện trong heading",
+          reason: "Heading giúp người đọc và công cụ tìm kiếm quét nhanh cấu trúc chủ đề.",
+          improvement: "Thêm từ khóa chính hoặc một biến thể gần nghĩa vào ít nhất một heading.",
+        },
+        primaryKeywordDensityBalanced: {
+          name: "Mật độ từ khóa chính cân bằng",
+          reason: "Từ khóa cần đủ rõ để nhận diện chủ đề nhưng không nên bị lặp gượng ép.",
+          improvement: "Giữ từ khóa chính xuất hiện tự nhiên, tránh nhồi nhét lặp lại.",
+        },
+        contentLengthSufficient: {
+          name: "Độ dài nội dung đủ chiều sâu",
+          reason: "Bài viết cần đủ nội dung để khai thác chủ đề một cách thuyết phục.",
+          improvement: "Mở rộng bài viết bằng thêm chi tiết hữu ích, ví dụ hoặc cấu trúc rõ hơn.",
+        },
+        summarySupportsTargetTopic: {
+          name: "Phần tóm tắt bám đúng chủ đề mục tiêu",
+          reason: "Tóm tắt nên củng cố cùng một search intent với bài viết chính.",
+          improvement: "Viết lại phần tóm tắt để hỗ trợ rõ hơn cho từ khóa và ý định tìm kiếm chính.",
+        },
+        internalLinksPresent: {
+          name: "Có liên kết nội bộ",
+          reason: "Liên kết nội bộ giúp bài viết kết nối với các nội dung khác trên cùng website.",
+          improvement: "Thêm ít nhất một liên kết nội bộ phù hợp tới nội dung liên quan trên site.",
+        },
+        outboundLinksPresent: {
+          name: "Có liên kết ngoài",
+          reason: "Liên kết ngoài có thể tăng độ tin cậy khi trích dẫn nguồn hữu ích.",
+          improvement: "Thêm ít nhất một liên kết ngoài tới nguồn uy tín khi phù hợp.",
+        },
+        detailedInformationProvidesContext: {
+          name: "Thông tin chi tiết cung cấp đủ bối cảnh",
+          reason: "Thông tin nền giúp hệ thống hiểu rõ hơn ngữ cảnh bài viết cần đánh giá.",
+          improvement: "Bổ sung thêm bối cảnh hoặc ghi chú để hệ thống hiểu bài viết rõ hơn.",
+        },
+        secondaryKeywordsDistributed: {
+          name: "Từ khóa phụ được phân bổ tự nhiên",
+          reason: "Các keyphrase hỗ trợ nên xuất hiện tự nhiên trong nội dung.",
+          improvement: "Đưa một vài từ khóa phụ vào heading hoặc đoạn hỗ trợ ở nơi phù hợp.",
+        },
+        synonymSupportPresent: {
+          name: "Có hỗ trợ từ đồng nghĩa",
+          reason: "Từ đồng nghĩa giúp mở rộng độ phủ chủ đề và giảm lặp từ khóa.",
+          improvement: "Thêm một vài cụm đồng nghĩa vào phần thân bài khi chúng thật sự cùng nghĩa.",
+        },
+        topicConsistencyMaintained: {
+          name: "Giữ được tính nhất quán chủ đề",
+          reason: "Thông tin hỗ trợ nên bám sát chủ đề và ý định tìm kiếm mục tiêu.",
+          improvement: "Dùng phần thông tin chi tiết và tóm tắt để làm rõ hơn hướng chủ đề chính.",
+        },
+        sentenceLengthManageable: {
+          name: "Độ dài câu ở mức dễ đọc",
+          reason: "Độ dài câu trung bình nên giữ ở mức dễ theo dõi với biên tập viên và độc giả.",
+          improvement: "Tách các câu quá dài thành các ý ngắn hơn để dễ quét và dễ hiểu.",
+        },
+        paragraphFlowScannable: {
+          name: "Đoạn văn dễ quét đọc",
+          reason: "Các khối văn bản quá dày khiến nội dung khó theo dõi hơn.",
+          improvement: "Chia các đoạn quá dài thành các đoạn ngắn hơn với nhịp rõ ràng hơn.",
+        },
+        headingDistributionExists: {
+          name: "Có phân bổ heading hợp lý",
+          reason: "Heading phụ giúp bài viết dài dễ điều hướng và dễ hiểu hơn.",
+          improvement: "Thêm heading phụ để cải thiện khả năng điều hướng và phân bổ từ khóa.",
+        },
+        transitionWordsSupportFlow: {
+          name: "Từ nối hỗ trợ mạch đọc",
+          reason: "Từ nối giúp người đọc theo dõi liên kết logic giữa các ý.",
+          improvement: "Bổ sung thêm một vài từ nối để bài viết chuyển ý tự nhiên hơn.",
+        },
+        passiveVoiceLimited: {
+          name: "Câu bị động được kiểm soát",
+          reason: "Quá nhiều câu bị động có thể làm nội dung kém trực diện và khó theo dõi hơn.",
+          improvement: "Viết lại một số câu bị động sang giọng chủ động, trực tiếp hơn.",
+        },
+        sentenceStartsVaried: {
+          name: "Mở đầu câu có sự đa dạng",
+          reason: "Mở đầu câu lặp lại nhiều dễ khiến bài viết bị cơ học và đơn điệu.",
+          improvement: "Thay đổi cách mở đầu câu để giọng văn tự nhiên và linh hoạt hơn.",
+        },
+      },
+    },
+  },
+} as const;
