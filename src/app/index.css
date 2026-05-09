@@ -512,6 +512,63 @@ textarea {
   gap: 8px;
 }
 
+.history-detail-layout {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 14px;
+}
+
+.history-card--full {
+  grid-column: 1 / -1;
+}
+
+.history-detail-grid {
+  display: grid;
+  gap: 8px;
+}
+
+.history-link {
+  color: var(--accent);
+  text-decoration: none;
+  overflow-wrap: anywhere;
+}
+
+.history-link:hover {
+  text-decoration: underline;
+}
+
+.history-chip-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 8px;
+}
+
+.history-chip {
+  display: inline-flex;
+  align-items: center;
+  padding: 6px 10px;
+  border-radius: 999px;
+  border: 1px solid var(--border);
+  background: rgba(255, 255, 255, 0.9);
+  font-size: 0.86rem;
+  color: var(--text);
+}
+
+.history-block {
+  margin: 8px 0 0;
+  color: var(--text);
+  white-space: pre-wrap;
+  word-break: break-word;
+}
+
+.history-section-list {
+  margin: 0;
+  padding-left: 18px;
+  display: grid;
+  gap: 8px;
+}
+
 .history-pagination {
   margin-top: 16px;
   display: flex;
@@ -593,7 +650,8 @@ textarea {
   .form-grid,
   .score-grid,
   .checklist__item,
-  .history-score-grid {
+  .history-score-grid,
+  .history-detail-layout {
     grid-template-columns: 1fr;
   }
 

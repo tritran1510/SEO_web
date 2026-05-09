@@ -137,6 +137,23 @@ export type ReviewHistoryItem = {
   advanced_score: number | null;
   status: string | null;
   notes: string | null;
+  article_content?: string | null;
+  summary?: string | null;
+  detailed_information?: string | null;
+  seo_title?: string | null;
+  meta_description?: string | null;
+  primary_keyword?: string | null;
+  secondary_keywords?: string | null;
+  synonyms?: string | null;
+  improvement_recommendations?: string[] | null;
+  checklist_results?: Array<{
+    checkName?: string;
+    check_name?: string;
+    status?: string;
+    result?: string;
+    improvement?: string;
+  }> | null;
+  [key: string]: unknown;
 };
 
 export type ReviewHistoryArticle = {
