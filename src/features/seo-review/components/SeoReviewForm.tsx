@@ -51,6 +51,7 @@ export function SeoReviewForm({ workspace }: SeoReviewFormProps) {
             value={form.articleTitle}
             onChange={(event) => workspace.updateField("articleTitle", event.target.value)}
             placeholder={t("seoReview.fields.articleTitle.placeholder")}
+            helperText={t("seoReview.fields.articleTitle.helperText")}
             tone={articleTitleField.tone}
             issues={articleTitleField.issues}
           />
@@ -59,6 +60,7 @@ export function SeoReviewForm({ workspace }: SeoReviewFormProps) {
             value={form.permanentLink}
             onChange={(event) => workspace.updateField("permanentLink", event.target.value)}
             placeholder={t("seoReview.fields.permanentLink.placeholder")}
+            helperText={t("seoReview.fields.permanentLink.helperText")}
             tone={permanentLinkField.tone}
             issues={permanentLinkField.issues}
           />
@@ -95,6 +97,7 @@ export function SeoReviewForm({ workspace }: SeoReviewFormProps) {
               value={form.detailedInformation}
               onChange={(event) => workspace.updateField("detailedInformation", event.target.value)}
               placeholder={t("seoReview.fields.detailedInformation.placeholder")}
+              helperText={t("seoReview.fields.detailedInformation.helperText")}
               tone={detailedInformationField.tone}
               issues={detailedInformationField.issues}
             />
@@ -107,6 +110,7 @@ export function SeoReviewForm({ workspace }: SeoReviewFormProps) {
               value={form.summary}
               onChange={(event) => workspace.updateField("summary", event.target.value)}
               placeholder={t("seoReview.fields.summary.placeholder")}
+              helperText={t("seoReview.fields.summary.helperText")}
               tone={summaryField.tone}
               issues={summaryField.issues}
             />
@@ -128,6 +132,7 @@ export function SeoReviewForm({ workspace }: SeoReviewFormProps) {
             value={form.keywordSet.seoTitle}
             onChange={(event) => workspace.updateKeywordField("seoTitle", event.target.value)}
             placeholder={t("seoReview.fields.seoTitle.placeholder")}
+            helperText={t("seoReview.fields.seoTitle.helperText")}
             tone={seoTitleField.tone}
             issues={seoTitleField.issues}
           />
@@ -136,6 +141,7 @@ export function SeoReviewForm({ workspace }: SeoReviewFormProps) {
             value={form.keywordSet.slug}
             onChange={(event) => workspace.updateKeywordField("slug", event.target.value)}
             placeholder={t("seoReview.fields.slug.placeholder")}
+            helperText={t("seoReview.fields.slug.helperText")}
             tone={slugField.tone}
             issues={slugField.issues}
           />
@@ -147,6 +153,7 @@ export function SeoReviewForm({ workspace }: SeoReviewFormProps) {
               value={form.keywordSet.metaDescription}
               onChange={(event) => workspace.updateKeywordField("metaDescription", event.target.value)}
               placeholder={t("seoReview.fields.metaDescription.placeholder")}
+              helperText={t("seoReview.fields.metaDescription.helperText")}
               tone={metaDescriptionField.tone}
               issues={metaDescriptionField.issues}
             />
@@ -156,6 +163,7 @@ export function SeoReviewForm({ workspace }: SeoReviewFormProps) {
             value={form.keywordSet.primaryKeyword}
             onChange={(event) => workspace.updateKeywordField("primaryKeyword", event.target.value)}
             placeholder={t("seoReview.fields.primaryKeyword.placeholder")}
+            helperText={t("seoReview.fields.primaryKeyword.helperText")}
             tone={primaryKeywordField.tone}
             issues={primaryKeywordField.issues}
           />

@@ -69,10 +69,12 @@ export const vi = {
         articleTitle: {
           label: "Tiêu đề bài viết",
           placeholder: "Nhập tiêu đề bài viết",
+          helperText: "Viết tiêu đề rõ chủ đề, ưu tiên chứa từ khóa chính một cách tự nhiên.",
         },
         permanentLink: {
           label: "Liên kết cố định",
           placeholder: "https://example.com/duong-dan-bai-viet",
+          helperText: "Dùng URL đầy đủ và thống nhất với slug để tránh lệch metadata.",
         },
         articleContent: {
           label: "Nội dung bài viết",
@@ -81,30 +83,37 @@ export const vi = {
         },
         contentImages: {
           label: "Hình ảnh nội dung",
+          helperText: "Thêm ảnh minh họa có liên quan đến nội dung để tăng chất lượng ngữ cảnh.",
         },
         detailedInformation: {
           label: "Thông tin chi tiết",
           placeholder: "Bổ sung bối cảnh, ghi chú hoặc thông tin hỗ trợ cho bài viết",
+          helperText: "Ghi rõ bối cảnh, đối tượng đọc hoặc yêu cầu biên tập đặc biệt.",
         },
         summary: {
           label: "Tóm tắt",
           placeholder: "Viết phần tóm tắt ngắn cho bài viết",
+          helperText: "Tóm tắt ngắn gọn nội dung chính và bám đúng search intent mục tiêu.",
         },
         seoTitle: {
           label: "Tiêu đề SEO",
           placeholder: "Tiêu đề dùng cho SEO",
+          helperText: "Giữ khoảng 45-65 ký tự và đặt từ khóa chính gần đầu tiêu đề.",
         },
         slug: {
           label: "Slug",
           placeholder: "slug-than-thien-voi-seo",
+          helperText: "Dùng chữ thường, gạch nối, ngắn gọn và phản ánh đúng chủ đề bài viết.",
         },
         metaDescription: {
           label: "Meta description",
           placeholder: "Mô tả hiển thị trên kết quả tìm kiếm",
+          helperText: "Viết 120-160 ký tự, nêu lợi ích chính và chèn từ khóa trọng tâm một lần.",
         },
         primaryKeyword: {
           label: "Từ khóa chính",
           placeholder: "Cụm từ khóa trọng tâm",
+          helperText: "Chọn một cụm từ khóa đại diện rõ nhất cho mục tiêu tìm kiếm của bài viết.",
         },
         secondaryKeywords: {
           label: "Từ khóa phụ",

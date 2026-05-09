@@ -73,6 +73,7 @@ export function ContentImagesField({
           }}
         />
       </div>
+      <span className="field__helper">{t("seoReview.fields.contentImages.helperText")}</span>
       {imageError ? <span className="field__helper field__helper--danger">{imageError}</span> : null}
       {issues.length > 0 ? (
         <ul className="field__issues">

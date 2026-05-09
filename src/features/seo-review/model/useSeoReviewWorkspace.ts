@@ -1,8 +1,7 @@
-import { useEffect, useMemo, useRef, useState } from "react";
+import { useMemo, useRef, useState } from "react";
 import type { ChangeEvent, ClipboardEvent, DragEvent, RefObject } from "react";
 import { useTranslation } from "react-i18next";
 import { requestSeoReview } from "../api/reviewApi";
-import { mockArticle } from "../data/mockArticle";
 import {
   buildPresentedFieldFeedback,
   buildTopRecommendations,
@@ -21,6 +20,23 @@ import type {
   ReviewFieldKey,
   ReviewReport,
 } from "./types";
+
+const EMPTY_ARTICLE_FORM: ArticleFormData = {
+  articleTitle: "",
+  permanentLink: "",
+  articleContent: "",
+  contentImages: [],
+  detailedInformation: "",
+  summary: "",
+  keywordSet: {
+    seoTitle: "",
+    slug: "",
+    metaDescription: "",
+    primaryKeyword: "",
+    secondaryKeywords: "",
+    synonyms: "",
+  },
+};
 
 const readImageFile = (file: File): Promise<ImportedImage> =>
   new Promise((resolve, reject) => {
@@ -84,7 +100,7 @@ export type SeoReviewWorkspace = {
 
 export function useSeoReviewWorkspace(): SeoReviewWorkspace {
   const { t } = useTranslation();
-  const [form, setForm] = useState<ArticleFormData>(mockArticle);
+  const [form, setForm] = useState<ArticleFormData>(EMPTY_ARTICLE_FORM);
   const [report, setReport] = useState<ReviewReport | null>(null);
   const [isReviewing, setIsReviewing] = useState(false);
   const [reviewError, setReviewError] = useState("");
@@ -228,11 +244,6 @@ export function useSeoReviewWorkspace(): SeoReviewWorkspace {
   const runReview = async () => {
     await reviewContent(form);
   };
-
-  useEffect(() => {
-    void reviewContent(mockArticle);
-  }, []);
-
   return {
     form,
     report,
