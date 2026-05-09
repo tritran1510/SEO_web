@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { useTranslation } from "react-i18next";
 import { fetchReviewedArticles } from "../api/reviewApi";
 import type { ReviewedArticleItem } from "../model/types";
 
@@ -7,6 +8,7 @@ type ReviewedArticlesListProps = {
 };
 
 export function ReviewedArticlesList({ onOpenArticleHistory }: ReviewedArticlesListProps) {
+  const { t } = useTranslation();
   const [items, setItems] = useState<ReviewedArticleItem[]>([]);
   const [page, setPage] = useState(1);
   const [pageSize] = useState(10);
@@ -31,7 +33,7 @@ export function ReviewedArticlesList({ onOpenArticleHistory }: ReviewedArticlesL
         if (!active) {
           return;
         }
-        setError(err instanceof Error ? err.message : "Failed to load reviewed articles.");
+        setError(err instanceof Error ? err.message : t("seoReview.errors.reviewedArticlesLoadFailed"));
       })
       .finally(() => {
         if (active) {
@@ -48,16 +50,16 @@ export function ReviewedArticlesList({ onOpenArticleHistory }: ReviewedArticlesL
     <section className="panel panel--highlight">
       <div className="panel__header">
         <div>
-          <p className="eyebrow">Lich su review / Review history</p>
-          <h2>Danh sach bai da review / Reviewed articles</h2>
+          <p className="eyebrow">{t("seoReview.reviewedArticles.eyebrow")}</p>
+          <h2>{t("seoReview.reviewedArticles.title")}</h2>
         </div>
       </div>
 
-      {loading ? <p className="panel__empty">Dang tai du lieu... / Loading data...</p> : null}
+      {loading ? <p className="panel__empty">{t("seoReview.reviewedArticles.loadingData")}</p> : null}
       {error ? <p className="panel__error">{error}</p> : null}
 
       {!loading && !error && items.length === 0 ? (
-        <p className="panel__empty">Chua co bai da review / No reviewed articles yet.</p>
+        <p className="panel__empty">{t("seoReview.reviewedArticles.emptyState")}</p>
       ) : null}
 
       <div className="history-list">
@@ -69,10 +71,10 @@ export function ReviewedArticlesList({ onOpenArticleHistory }: ReviewedArticlesL
                 Slug: <strong>{item.slug}</strong>
               </p>
               <p className="history-meta">
-                Tu khoa chinh / Primary keyword: <strong>{item.primary_keyword ?? "-"}</strong>
+                {t("seoReview.reviewedArticles.primaryKeyword")}: <strong>{item.primary_keyword ?? "-"}</strong>
               </p>
               <p className="history-meta">
-                Tong so lan review / Total reviews: <strong>{item.total_reviews}</strong>
+                {t("seoReview.reviewedArticles.totalReviews")}: <strong>{item.total_reviews}</strong>
               </p>
             </div>
             <div className="history-score-grid">
@@ -86,7 +88,7 @@ export function ReviewedArticlesList({ onOpenArticleHistory }: ReviewedArticlesL
               className="primary-button"
               onClick={() => onOpenArticleHistory(item.article_id)}
             >
-              Xem lich su / View history
+              {t("seoReview.reviewedArticles.viewHistory")}
             </button>
           </article>
         ))}
@@ -99,10 +101,10 @@ export function ReviewedArticlesList({ onOpenArticleHistory }: ReviewedArticlesL
           onClick={() => setPage((current) => Math.max(1, current - 1))}
           disabled={page <= 1 || loading}
         >
-          Truoc / Prev
+          {t("seoReview.reviewedArticles.previous")}
         </button>
         <span>
-          Trang / Page {page}/{totalPages}
+          {t("seoReview.reviewedArticles.page", { current: page, total: totalPages })}
         </span>
         <button
           type="button"
@@ -110,7 +112,7 @@ export function ReviewedArticlesList({ onOpenArticleHistory }: ReviewedArticlesL
           onClick={() => setPage((current) => Math.min(totalPages, current + 1))}
           disabled={page >= totalPages || loading}
         >
-          Sau / Next
+          {t("seoReview.reviewedArticles.next")}
         </button>
       </div>
     </section>

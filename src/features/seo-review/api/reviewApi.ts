@@ -11,7 +11,8 @@ type ApiEnvelope<T> = {
   data?: T;
 };
 
-const resolveApiBaseUrl = () => import.meta.env.VITE_API_BASE_URL?.trim() || "http://localhost:8080";
+const resolveApiBaseUrl = () => (import.meta.env.VITE_API_BASE_URL?.trim() || "/api").replace(/\/+$/, "");
+const createApiUrl = (path: string) => `${resolveApiBaseUrl()}${path.startsWith("/") ? path : `/${path}`}`;
 
 async function parseResponse<T>(response: Response): Promise<ApiEnvelope<T> | null> {
   const responseText = await response.text();
@@ -27,7 +28,7 @@ async function parseResponse<T>(response: Response): Promise<ApiEnvelope<T> | nu
 }
 
 export async function requestSeoReview(input: ArticleFormData): Promise<ReviewReport> {
-  const response = await fetch(`${resolveApiBaseUrl()}/api/review`, {
+  const response = await fetch(createApiUrl("/review"), {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
@@ -48,9 +49,7 @@ export async function fetchReviewedArticles(
   page = 1,
   pageSize = 10,
 ): Promise<ReviewedArticlesResponse> {
-  const response = await fetch(
-    `${resolveApiBaseUrl()}/api/reviews?page=${page}&pageSize=${pageSize}`,
-  );
+  const response = await fetch(createApiUrl(`/reviews?page=${page}&pageSize=${pageSize}`));
 
   const payload = await parseResponse<ReviewedArticlesResponse>(response);
   if (!response.ok || !payload?.data) {
@@ -65,9 +64,7 @@ export async function fetchReviewHistory(
   page = 1,
   pageSize = 20,
 ): Promise<ReviewHistoryResponse> {
-  const response = await fetch(
-    `${resolveApiBaseUrl()}/api/reviews/${articleId}?page=${page}&pageSize=${pageSize}`,
-  );
+  const response = await fetch(createApiUrl(`/reviews/${articleId}?page=${page}&pageSize=${pageSize}`));
 
   const payload = await parseResponse<ReviewHistoryResponse>(response);
   if (!response.ok || !payload?.data) {

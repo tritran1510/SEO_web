@@ -109,7 +109,7 @@ export type ReviewedArticleItem = {
   slug: string;
   permanent_link: string;
   primary_keyword: string | null;
-  latest_review_id: number | null;
+  latest_review_id: string | null;
   latest_overall_score: number | null;
   latest_seo_score: number | null;
   latest_readability_score: number | null;
@@ -129,7 +129,7 @@ export type ReviewedArticlesResponse = {
 };
 
 export type ReviewHistoryItem = {
-  review_id: number;
+  review_id: string;
   created_at: string;
   overall_score: number | null;
   seo_score: number | null;
@@ -137,6 +137,23 @@ export type ReviewHistoryItem = {
   advanced_score: number | null;
   status: string | null;
   notes: string | null;
+  article_content?: string | null;
+  summary?: string | null;
+  detailed_information?: string | null;
+  seo_title?: string | null;
+  meta_description?: string | null;
+  primary_keyword?: string | null;
+  secondary_keywords?: string | null;
+  synonyms?: string | null;
+  improvement_recommendations?: string[] | null;
+  checklist_results?: Array<{
+    checkName?: string;
+    check_name?: string;
+    status?: string;
+    result?: string;
+    improvement?: string;
+  }> | null;
+  [key: string]: unknown;
 };
 
 export type ReviewHistoryArticle = {
