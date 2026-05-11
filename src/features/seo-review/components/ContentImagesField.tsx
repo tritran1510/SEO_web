@@ -1,4 +1,5 @@
 import { useTranslation } from "react-i18next";
+import { useEffect, useMemo, useState } from "react";
 import type { ChangeEvent, ClipboardEvent, DragEvent, RefObject } from "react";
 import type { ImportedImage } from "../model/types";
 
@@ -11,6 +12,7 @@ type ContentImagesFieldProps = {
   onPasteImages: (event: ClipboardEvent<HTMLDivElement>) => Promise<void>;
   onDropImages: (event: DragEvent<HTMLDivElement>) => Promise<void>;
   onRemoveImage: (imageId: string) => void;
+  onUpdateImageInfo: (imageId: string, updates: { name?: string; mimeType?: string }) => void;
 };
 
 export function ContentImagesField({
@@ -22,8 +24,53 @@ export function ContentImagesField({
   onPasteImages,
   onDropImages,
   onRemoveImage,
+  onUpdateImageInfo,
 }: ContentImagesFieldProps) {
   const { t } = useTranslation();
+  const [isDialogOpen, setIsDialogOpen] = useState(false);
+  const [selectedImageId, setSelectedImageId] = useState<string | null>(null);
+  const [imageNameInput, setImageNameInput] = useState("");
+  const [imageMimeInput, setImageMimeInput] = useState("");
+
+  const selectedImage = useMemo(
+    () => images.find((image) => image.id === selectedImageId) ?? null,
+    [images, selectedImageId],
+  );
+
+  useEffect(() => {
+    if (images.length === 0) {
+      setSelectedImageId(null);
+      setImageNameInput("");
+      setImageMimeInput("");
+      return;
+    }
+
+    if (!selectedImageId) {
+      const firstImage = images[0];
+      setSelectedImageId(firstImage.id);
+      setImageNameInput(firstImage.name);
+      setImageMimeInput(firstImage.mimeType);
+      return;
+    }
+
+    const current = images.find((image) => image.id === selectedImageId);
+    if (!current) {
+      const firstImage = images[0];
+      setSelectedImageId(firstImage.id);
+      setImageNameInput(firstImage.name);
+      setImageMimeInput(firstImage.mimeType);
+      return;
+    }
+
+    setImageNameInput(current.name);
+    setImageMimeInput(current.mimeType);
+  }, [images, selectedImageId]);
+
+  const handleSelectImage = (image: ImportedImage) => {
+    setSelectedImageId(image.id);
+    setImageNameInput(image.name);
+    setImageMimeInput(image.mimeType);
+  };
 
   return (
     <div className="field">
@@ -83,25 +130,112 @@ export function ContentImagesField({
         </ul>
       ) : null}
       {images.length > 0 ? (
-        <div className="image-grid">
-          {images.map((image) => (
-            <article key={image.id} className="image-card">
-              <img src={image.dataUrl} alt={image.name} className="image-card__preview" />
-              <div className="image-card__footer">
-                <div>
-                  <p className="image-card__name">{image.name}</p>
-                  <p className="image-card__meta">{image.mimeType}</p>
-                </div>
-                <button
-                  type="button"
-                className="ghost-button ghost-button--danger"
-                onClick={() => onRemoveImage(image.id)}
+        <div className="image-manager">
+          <div className="image-grid image-grid--compact">
+            {images.slice(0, 6).map((image) => (
+              <button
+                key={image.id}
+                type="button"
+                className="image-grid__thumb-button"
+                onClick={() => {
+                  handleSelectImage(image);
+                  setIsDialogOpen(true);
+                }}
               >
-                  {t("common.actions.remove")}
-                </button>
+                <img src={image.dataUrl} alt={image.name} className="image-card__preview" />
+              </button>
+            ))}
+          </div>
+          <button
+            type="button"
+            className="ghost-button"
+            onClick={() => {
+              if (!selectedImageId && images[0]) {
+                handleSelectImage(images[0]);
+              }
+              setIsDialogOpen(true);
+            }}
+          >
+            {t("seoReview.imageInput.openImageDialog", { count: images.length })}
+          </button>
+        </div>
+      ) : null}
+
+      {isDialogOpen ? (
+        <div className="image-dialog__backdrop" role="presentation" onClick={() => setIsDialogOpen(false)}>
+          <div
+            className="image-dialog"
+            role="dialog"
+            aria-modal="true"
+            aria-label={t("seoReview.imageInput.dialogTitle")}
+            onClick={(event) => event.stopPropagation()}
+          >
+            <div className="image-dialog__header">
+              <h3>{t("seoReview.imageInput.dialogTitle")}</h3>
+              <button type="button" className="ghost-button" onClick={() => setIsDialogOpen(false)}>
+                {t("common.actions.close")}
+              </button>
+            </div>
+
+            <div className="image-dialog__body">
+              <div className="image-grid image-grid--dialog">
+                {images.map((image) => (
+                  <button
+                    key={image.id}
+                    type="button"
+                    className={`image-grid__thumb-button ${
+                      selectedImageId === image.id ? "image-grid__thumb-button--active" : ""
+                    }`}
+                    onClick={() => handleSelectImage(image)}
+                  >
+                    <img src={image.dataUrl} alt={image.name} className="image-card__preview" />
+                  </button>
+                ))}
               </div>
-            </article>
-          ))}
+
+              <div className="image-dialog__meta">
+                <label className="field">
+                  <span className="field__label">{t("seoReview.imageInput.fields.nameLabel")}</span>
+                  <input
+                    className="field__control"
+                    value={imageNameInput}
+                    onChange={(event) => {
+                      const nextValue = event.target.value;
+                      setImageNameInput(nextValue);
+                      if (selectedImage) {
+                        onUpdateImageInfo(selectedImage.id, { name: nextValue });
+                      }
+                    }}
+                  />
+                </label>
+
+                <label className="field">
+                  <span className="field__label">{t("seoReview.imageInput.fields.mimeTypeLabel")}</span>
+                  <input
+                    className="field__control"
+                    value={imageMimeInput}
+                    onChange={(event) => {
+                      const nextValue = event.target.value;
+                      setImageMimeInput(nextValue);
+                      if (selectedImage) {
+                        onUpdateImageInfo(selectedImage.id, { mimeType: nextValue });
+                      }
+                    }}
+                  />
+                </label>
+
+                {selectedImage ? (
+                  <button
+                    type="button"
+                    className="ghost-button ghost-button--danger"
+                    onClick={() => onRemoveImage(selectedImage.id)}
+                  >
+                    {t("common.actions.remove")}
+                  </button>
+                ) : null}
+              </div>
+            </div>
+          </div>
         </div>
       ) : null}
     </div>

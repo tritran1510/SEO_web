@@ -95,6 +95,7 @@ export type SeoReviewWorkspace = {
   handlePasteImages: (event: ClipboardEvent<HTMLDivElement>) => Promise<void>;
   handleDropImages: (event: DragEvent<HTMLDivElement>) => Promise<void>;
   removeImage: (imageId: string) => void;
+  updateImageInfo: (imageId: string, updates: { name?: string; mimeType?: string }) => void;
   runReview: () => Promise<void>;
 };
 
@@ -213,6 +214,21 @@ export function useSeoReviewWorkspace(): SeoReviewWorkspace {
     }));
   };
 
+  const updateImageInfo = (imageId: string, updates: { name?: string; mimeType?: string }) => {
+    setForm((current) => ({
+      ...current,
+      contentImages: current.contentImages.map((image) =>
+        image.id === imageId
+          ? {
+              ...image,
+              name: updates.name ?? image.name,
+              mimeType: updates.mimeType ?? image.mimeType,
+            }
+          : image,
+      ),
+    }));
+  };
+
   const handleFileSelection = async (event: ChangeEvent<HTMLInputElement>) => {
     const files = event.target.files ? Array.from(event.target.files) : [];
     if (files.length > 0) {
@@ -263,6 +279,7 @@ export function useSeoReviewWorkspace(): SeoReviewWorkspace {
     handlePasteImages,
     handleDropImages,
     removeImage,
+    updateImageInfo,
     runReview,
   };
 }

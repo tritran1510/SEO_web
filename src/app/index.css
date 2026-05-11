@@ -268,6 +268,12 @@ textarea {
   color: var(--danger);
 }
 
+.field__context {
+  margin: 6px 0 0;
+  font-size: 0.86rem;
+  color: var(--muted);
+}
+
 .field__issues {
   margin: 0;
   padding-left: 18px;
@@ -279,6 +285,61 @@ textarea {
 
 .keyword-inline-field .field__issues {
   min-height: 4.2em;
+}
+
+.rich-editor {
+  position: relative;
+  width: 100%;
+  border: 1px solid var(--border-strong);
+  border-radius: 18px;
+  background: rgba(255, 255, 255, 0.8);
+  padding: 14px 16px;
+  line-height: 1.4;
+  color: var(--text);
+  overflow: auto;
+  white-space: pre-wrap;
+  word-break: break-word;
+  transition: border-color 180ms ease, box-shadow 180ms ease, transform 180ms ease;
+}
+
+.rich-editor:focus {
+  outline: none;
+  border-color: rgba(54, 95, 62, 0.42);
+  box-shadow: 0 0 0 4px rgba(111, 151, 108, 0.14);
+  transform: translateY(-1px);
+}
+
+.rich-editor--attention {
+  border-color: rgba(183, 113, 35, 0.48);
+  background: rgba(255, 248, 239, 0.96);
+}
+
+.rich-editor:empty::before {
+  content: attr(data-placeholder);
+  color: var(--muted);
+}
+
+.rich-editor__placeholder {
+  position: absolute;
+  margin: 14px 16px;
+  color: var(--muted);
+  pointer-events: none;
+}
+
+.rich-editor img {
+  max-width: 100%;
+  height: auto;
+}
+
+.rich-editor table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.rich-editor th,
+.rich-editor td {
+  border: 1px solid var(--border-strong);
+  padding: 6px 8px;
 }
 
 .image-dropzone {
@@ -336,6 +397,86 @@ textarea {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
   gap: 14px;
+}
+
+.image-manager {
+  display: grid;
+  gap: 12px;
+  margin-top: 12px;
+}
+
+.image-grid--compact {
+  grid-template-columns: repeat(auto-fit, minmax(110px, 1fr));
+}
+
+.image-grid--dialog {
+  margin-top: 0;
+  grid-template-columns: repeat(auto-fill, minmax(110px, 1fr));
+  max-height: 340px;
+  overflow: auto;
+  padding-right: 4px;
+}
+
+.image-grid__thumb-button {
+  border: 1px solid var(--border);
+  background: rgba(255, 255, 255, 0.88);
+  border-radius: 14px;
+  padding: 4px;
+}
+
+.image-grid__thumb-button .image-card__preview {
+  height: 96px;
+  border-radius: 10px;
+}
+
+.image-grid__thumb-button--active {
+  border-color: rgba(54, 95, 62, 0.52);
+  box-shadow: 0 0 0 3px rgba(54, 95, 62, 0.12);
+}
+
+.image-dialog__backdrop {
+  position: fixed;
+  inset: 0;
+  background: rgba(21, 33, 26, 0.5);
+  display: grid;
+  place-items: center;
+  z-index: 30;
+  padding: 18px;
+}
+
+.image-dialog {
+  width: min(980px, 100%);
+  max-height: 90vh;
+  overflow: auto;
+  border: 1px solid var(--border);
+  border-radius: 22px;
+  background: var(--surface-strong);
+  box-shadow: var(--shadow);
+  padding: 18px;
+}
+
+.image-dialog__header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.image-dialog__header h3 {
+  margin: 0;
+}
+
+.image-dialog__body {
+  display: grid;
+  grid-template-columns: minmax(0, 1.2fr) minmax(280px, 0.8fr);
+  gap: 16px;
+  margin-top: 14px;
+}
+
+.image-dialog__meta {
+  display: grid;
+  gap: 10px;
+  align-content: start;
 }
 
 .image-card {
@@ -657,6 +798,10 @@ textarea {
   .checklist__item,
   .history-score-grid,
   .history-detail-layout {
+    grid-template-columns: 1fr;
+  }
+
+  .image-dialog__body {
     grid-template-columns: 1fr;
   }
 

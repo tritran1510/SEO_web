@@ -3,6 +3,7 @@ export const vi = {
     common: {
       actions: {
         remove: "Xóa",
+        close: "Đóng",
       },
       status: {
         ready: "Sẵn sàng",
@@ -128,6 +129,8 @@ export const vi = {
           label: "Từ khóa phụ",
           placeholder: "Các từ khóa, ngăn cách bằng dấu phẩy",
           helperText: "Dùng dấu phẩy để tách các từ khóa hỗ trợ.",
+          primaryContext: "Từ khóa chính hiện tại: {{value}}",
+          primaryEmpty: "Chưa nhập từ khóa chính",
         },
         synonyms: {
           label: "Từ đồng nghĩa",
@@ -142,6 +145,12 @@ export const vi = {
           "Nhấp vào khu vực này rồi dán screenshot hoặc ảnh đã copy giống như khi bạn soạn nội dung trong trình biên tập. Bạn cũng có thể chọn tệp thủ công.",
         chooseFiles: "Chọn tệp hình ảnh",
         chooseFilesAria: "Chọn hình ảnh cho nội dung",
+        openImageDialog: "Quản lý ảnh ({{count}})",
+        dialogTitle: "Danh sách hình ảnh",
+        fields: {
+          nameLabel: "Tên hình ảnh",
+          mimeTypeLabel: "Định dạng ảnh",
+        },
       },
       history: {
         articleTimelineEyebrow: "Lịch sử theo bài viết",

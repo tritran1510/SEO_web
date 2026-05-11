@@ -1,5 +1,6 @@
 import { useTranslation } from "react-i18next";
 import { Field } from "../../../shared/ui/Field";
+import { RichTextField } from "../../../shared/ui/RichTextField";
 import { ContentImagesField } from "./ContentImagesField";
 import type { SeoReviewWorkspace } from "../model/useSeoReviewWorkspace";
 
@@ -65,16 +66,15 @@ export function SeoReviewForm({ workspace }: SeoReviewFormProps) {
             issues={permanentLinkField.issues}
           />
           <div className="form-grid__full">
-            <Field
-              as="textarea"
-              rows={8}
+            <RichTextField
               label={t("seoReview.fields.articleContent.label")}
               value={form.articleContent}
-              onChange={(event) => workspace.updateField("articleContent", event.target.value)}
+              onChange={(nextValue) => workspace.updateField("articleContent", nextValue)}
               placeholder={t("seoReview.fields.articleContent.placeholder")}
               helperText={t("seoReview.fields.articleContent.helperText")}
               tone={articleContentField.tone}
               issues={articleContentField.issues}
+              minHeight={220}
             />
           </div>
           <div className="form-grid__full">
@@ -87,32 +87,31 @@ export function SeoReviewForm({ workspace }: SeoReviewFormProps) {
               onPasteImages={workspace.handlePasteImages}
               onDropImages={workspace.handleDropImages}
               onRemoveImage={workspace.removeImage}
+              onUpdateImageInfo={workspace.updateImageInfo}
             />
           </div>
           <div className="form-grid__full">
-            <Field
-              as="textarea"
-              rows={4}
+            <RichTextField
               label={t("seoReview.fields.detailedInformation.label")}
               value={form.detailedInformation}
-              onChange={(event) => workspace.updateField("detailedInformation", event.target.value)}
+              onChange={(nextValue) => workspace.updateField("detailedInformation", nextValue)}
               placeholder={t("seoReview.fields.detailedInformation.placeholder")}
               helperText={t("seoReview.fields.detailedInformation.helperText")}
               tone={detailedInformationField.tone}
               issues={detailedInformationField.issues}
+              minHeight={140}
             />
           </div>
           <div className="form-grid__full">
-            <Field
-              as="textarea"
-              rows={3}
+            <RichTextField
               label={t("seoReview.fields.summary.label")}
               value={form.summary}
-              onChange={(event) => workspace.updateField("summary", event.target.value)}
+              onChange={(nextValue) => workspace.updateField("summary", nextValue)}
               placeholder={t("seoReview.fields.summary.placeholder")}
               helperText={t("seoReview.fields.summary.helperText")}
               tone={summaryField.tone}
               issues={summaryField.issues}
+              minHeight={120}
             />
           </div>
         </div>
@@ -146,16 +145,15 @@ export function SeoReviewForm({ workspace }: SeoReviewFormProps) {
             issues={slugField.issues}
           />
           <div className="form-grid__full">
-            <Field
-              as="textarea"
-              rows={3}
+            <RichTextField
               label={t("seoReview.fields.metaDescription.label")}
               value={form.keywordSet.metaDescription}
-              onChange={(event) => workspace.updateKeywordField("metaDescription", event.target.value)}
+              onChange={(nextValue) => workspace.updateKeywordField("metaDescription", nextValue)}
               placeholder={t("seoReview.fields.metaDescription.placeholder")}
               helperText={t("seoReview.fields.metaDescription.helperText")}
               tone={metaDescriptionField.tone}
               issues={metaDescriptionField.issues}
+              minHeight={110}
             />
           </div>
           <div className="keyword-inline-field">
@@ -179,6 +177,11 @@ export function SeoReviewForm({ workspace }: SeoReviewFormProps) {
               tone={secondaryKeywordsField.tone}
               issues={secondaryKeywordsField.issues}
             />
+            <p className="field__context">
+              {t("seoReview.fields.secondaryKeywords.primaryContext", {
+                value: form.keywordSet.primaryKeyword || t("seoReview.fields.secondaryKeywords.primaryEmpty"),
+              })}
+            </p>
           </div>
           <div className="form-grid__full">
             <Field

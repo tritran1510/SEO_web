@@ -3,6 +3,7 @@ export const en = {
     common: {
       actions: {
         remove: "Remove",
+        close: "Close",
       },
       status: {
         ready: "Ready",
@@ -126,6 +127,8 @@ export const en = {
           label: "Secondary keywords",
           placeholder: "Keywords separated by commas",
           helperText: "Use commas to separate supporting keyphrases.",
+          primaryContext: "Current primary keyword: {{value}}",
+          primaryEmpty: "Primary keyword not provided yet",
         },
         synonyms: {
           label: "Synonyms",
@@ -140,6 +143,12 @@ export const en = {
           "Click this area and paste screenshots or copied images, similar to your editorial workflow. You can also choose image files manually.",
         chooseFiles: "Choose image files",
         chooseFilesAria: "Choose images for content",
+        openImageDialog: "Manage images ({{count}})",
+        dialogTitle: "Image Gallery",
+        fields: {
+          nameLabel: "Image name",
+          mimeTypeLabel: "MIME type",
+        },
       },
       history: {
         articleTimelineEyebrow: "Article timeline",
