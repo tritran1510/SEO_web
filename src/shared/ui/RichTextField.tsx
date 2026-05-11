@@ -516,30 +516,35 @@ function MediaPickerDialog({
             Close
           </button>
         </div>
-        {onAddFiles ? (
-          <label className="ghost-button" style={{ width: "fit-content" }}>
-            Upload media
-            <input
-              hidden
-              type="file"
-              accept="image/*"
-              multiple
-              onChange={(event) => {
-                const files = event.target.files ? Array.from(event.target.files) : [];
-                if (files.length > 0) {
-                  void onAddFiles(files);
-                }
-                event.target.value = "";
-              }}
-            />
-          </label>
-        ) : null}
-        <div className="image-grid image-grid--dialog">
-          {items.map((image) => (
-            <button key={image.id} type="button" className="image-grid__thumb-button" onClick={() => onPick(image)}>
-              <img src={image.dataUrl} alt={image.name} className="image-card__preview" />
-            </button>
-          ))}
+        <div className="image-dialog__actions">
+          {onAddFiles ? (
+            <label className="ghost-button image-dialog__upload-button">
+              Upload media
+              <input
+                hidden
+                type="file"
+                accept="image/*"
+                multiple
+                onChange={(event) => {
+                  const files = event.target.files ? Array.from(event.target.files) : [];
+                  if (files.length > 0) {
+                    void onAddFiles(files);
+                  }
+                  event.target.value = "";
+                }}
+              />
+            </label>
+          ) : null}
+          <span className="image-dialog__hint">Select one image to insert into article content.</span>
+        </div>
+        <div className="image-dialog__grid-wrap">
+          <div className="image-grid image-grid--dialog">
+            {items.map((image) => (
+              <button key={image.id} type="button" className="image-grid__thumb-button" onClick={() => onPick(image)}>
+                <img src={image.dataUrl} alt={image.name} className="image-card__preview" />
+              </button>
+            ))}
+          </div>
         </div>
       </div>
     </div>
