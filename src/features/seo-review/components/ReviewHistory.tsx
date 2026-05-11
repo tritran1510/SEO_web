@@ -188,7 +188,7 @@ export function ReviewHistory({ articleId, onBackToList, onOpenReviewDetail }: R
           <div className="history-list">
             {data.reviews.map((review) => (
               <article key={review.review_id} className="history-card">
-                <h3>Review #{review.review_id}</h3>
+                <h3>{t("seoReview.history.reviewWithId", { id: review.review_id })}</h3>
                 <p className="history-meta">
                   {t("seoReview.history.reviewAtTime")}: {formatDateTime(review.created_at)}
                 </p>

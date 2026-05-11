@@ -68,7 +68,7 @@ export function ReviewedArticlesList({ onOpenArticleHistory }: ReviewedArticlesL
             <div>
               <h3>{item.title}</h3>
               <p className="history-meta">
-                Slug: <strong>{item.slug}</strong>
+                {t("seoReview.reviewedArticles.slug")}: <strong>{item.slug}</strong>
               </p>
               <p className="history-meta">
                 {t("seoReview.reviewedArticles.primaryKeyword")}: <strong>{item.primary_keyword ?? "-"}</strong>
@@ -78,10 +78,10 @@ export function ReviewedArticlesList({ onOpenArticleHistory }: ReviewedArticlesL
               </p>
             </div>
             <div className="history-score-grid">
-              <span>Overall: {item.latest_overall_score ?? "-"}</span>
-              <span>SEO: {item.latest_seo_score ?? "-"}</span>
-              <span>Readability: {item.latest_readability_score ?? "-"}</span>
-              <span>Advanced: {item.latest_advanced_score ?? "-"}</span>
+              <span>{t("seoReview.reviewedArticles.overallScore")}: {item.latest_overall_score ?? "-"}</span>
+              <span>{t("seoReview.reviewedArticles.seoScore")}: {item.latest_seo_score ?? "-"}</span>
+              <span>{t("seoReview.reviewedArticles.readabilityScore")}: {item.latest_readability_score ?? "-"}</span>
+              <span>{t("seoReview.reviewedArticles.advancedScore")}: {item.latest_advanced_score ?? "-"}</span>
             </div>
             <button
               type="button"

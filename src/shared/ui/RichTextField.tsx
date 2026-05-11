@@ -41,6 +41,7 @@ import {
 import { LinkNode, TOGGLE_LINK_COMMAND } from "@lexical/link";
 import { INSERT_TABLE_COMMAND, TableCellNode, TableNode, TableRowNode } from "@lexical/table";
 import { $generateHtmlFromNodes, $generateNodesFromDOM } from "@lexical/html";
+import { useTranslation } from "react-i18next";
 
 const DEFAULT_MIN_HEIGHT = 120;
 const TOOLBAR_FONT_FAMILIES = ["Arial", "Georgia", "Tahoma", "Times New Roman", "Verdana"];
@@ -156,6 +157,7 @@ export function RichTextField({
   mediaItems = [],
   onAddMediaFiles,
 }: RichTextFieldProps) {
+  const { t } = useTranslation();
   const lastAppliedHtmlRef = useRef(value || "");
   const helperId = id ? `${id}-helper` : undefined;
   const issuesId = id ? `${id}-issues` : undefined;
@@ -238,6 +240,7 @@ function RichTextToolbar({
   mediaItems: Array<{ id: string; name: string; dataUrl: string; altText?: string }>;
   onAddMediaFiles?: (files: File[]) => Promise<void>;
 }) {
+  const { t } = useTranslation();
   const [editor] = useLexicalComposerContext();
   const [isMediaDialogOpen, setIsMediaDialogOpen] = useState(false);
   const lastSelectionRef = useRef<{
@@ -307,7 +310,7 @@ function RichTextToolbar({
   };
 
   const insertLink = () => {
-    const url = window.prompt("Enter URL");
+    const url = window.prompt(t("seoReview.richText.enterUrlPrompt"));
     if (!url) {
       return;
     }
@@ -350,26 +353,18 @@ function RichTextToolbar({
             className="rich-toolbar__button rich-toolbar__button--media"
             onMouseDown={rememberSelection}
             onClick={() => setIsMediaDialogOpen(true)}
-            aria-label="Open media manager"
+            aria-label={t("seoReview.richText.openMediaManagerAria")}
           >
             <span className="rich-toolbar__icon" aria-hidden>
               +
             </span>
-            <span>Thêm Media</span>
+            <span>{t("seoReview.richText.addMedia")}</span>
           </button>
-          <div className="rich-toolbar__mode-toggle" role="group" aria-label="Editor mode">
-            <button type="button" className="rich-toolbar__mode rich-toolbar__mode--active" aria-pressed="true">
-              Trực quan
-            </button>
-            <button type="button" className="rich-toolbar__mode" aria-pressed="false">
-              Văn bản
-            </button>
-          </div>
         </div>
-        <div className="rich-toolbar-scroll" role="toolbar" aria-label="Rich text formatting toolbar">
+        <div className="rich-toolbar-scroll" role="toolbar" aria-label={t("seoReview.richText.toolbarAriaLabel")}>
           <select className="rich-toolbar__select" onChange={(event) => applyFontFamily(event.target.value)} defaultValue="">
             <option value="" disabled>
-              Font
+              {t("seoReview.richText.font")}
             </option>
             {TOOLBAR_FONT_FAMILIES.map((font) => (
               <option key={font} value={font}>
@@ -380,7 +375,7 @@ function RichTextToolbar({
 
           <select className="rich-toolbar__select" onChange={(event) => applyFontSize(event.target.value)} defaultValue="">
             <option value="" disabled>
-              Size
+              {t("seoReview.richText.size")}
             </option>
             {TOOLBAR_FONT_SIZES.map((fontSize) => (
               <option key={fontSize} value={fontSize}>
@@ -399,7 +394,7 @@ function RichTextToolbar({
             H2
           </button>
           <button type="button" className="rich-toolbar__button" onClick={() => applyBlockType("quote")}>
-            Quote
+            {t("seoReview.richText.quote")}
           </button>
 
           <button type="button" className="rich-toolbar__button" onClick={() => editor.dispatchCommand(FORMAT_TEXT_COMMAND, "bold")}>
@@ -431,11 +426,11 @@ function RichTextToolbar({
             OL
           </button>
           <button type="button" className="rich-toolbar__button" onClick={() => editor.dispatchCommand(REMOVE_LIST_COMMAND, undefined)}>
-            List Off
+            {t("seoReview.richText.listOff")}
           </button>
 
           <button type="button" className="rich-toolbar__button" onClick={insertLink}>
-            Link
+            {t("seoReview.richText.link")}
           </button>
           <button
             type="button"
@@ -444,7 +439,7 @@ function RichTextToolbar({
               editor.dispatchCommand(INSERT_TABLE_COMMAND, { columns: "3", rows: "3", includeHeaders: true })
             }
           >
-            Table
+            {t("seoReview.richText.table")}
           </button>
         </div>
       </div>
@@ -507,19 +502,20 @@ function MediaPickerDialog({
   onPick: (image: { id: string; name: string; dataUrl: string; altText?: string }) => void;
   onAddFiles?: (files: File[]) => Promise<void>;
 }) {
+  const { t } = useTranslation();
   const dialogContent = (
     <div className="image-dialog__backdrop" role="presentation" onClick={onClose}>
       <div className="image-dialog image-dialog--large" role="dialog" aria-modal="true" onClick={(e) => e.stopPropagation()}>
         <div className="image-dialog__header">
-          <h3>Media Manager</h3>
+          <h3>{t("seoReview.richText.mediaManagerTitle")}</h3>
           <button type="button" className="ghost-button" onClick={onClose}>
-            Close
+            {t("common.actions.close")}
           </button>
         </div>
         <div className="image-dialog__actions">
           {onAddFiles ? (
             <label className="ghost-button image-dialog__upload-button">
-              Upload media
+              {t("seoReview.richText.uploadMedia")}
               <input
                 hidden
                 type="file"
@@ -535,7 +531,7 @@ function MediaPickerDialog({
               />
             </label>
           ) : null}
-          <span className="image-dialog__hint">Select one image to insert into article content.</span>
+          <span className="image-dialog__hint">{t("seoReview.richText.selectImageHint")}</span>
         </div>
         <div className="image-dialog__grid-wrap">
           <div className="image-grid image-grid--dialog">

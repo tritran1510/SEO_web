@@ -37,7 +37,7 @@ function App() {
               void switchLanguage("vi");
             }}
           >
-            <img src={vnFlag} width="32" style={{ borderRadius: '2px' }} alt="VN flag" />
+            <img src={vnFlag} width="32" style={{ borderRadius: "2px" }} alt={t("common.language.vietnameseFlagAlt")} />
           </button>
           <button
             type="button"
@@ -48,7 +48,7 @@ function App() {
               void switchLanguage("en");
             }}
           >
-            <img src={enFlag} width="32" style={{ borderRadius: '2px' }} alt="US flag" />
+            <img src={enFlag} width="32" style={{ borderRadius: "2px" }} alt={t("common.language.englishFlagAlt")} />
           </button>
         </div>
       </div>
