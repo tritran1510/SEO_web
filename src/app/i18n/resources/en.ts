@@ -90,13 +90,14 @@ export const en = {
           helperText: "This content is sent directly to the backend API for review.",
         },
         contentImages: {
-          label: "Content images",
-          helperText: "Add images relevant to the article to improve contextual quality.",
+          label: "Product images",
+          helperText:
+            "Manage product images and image metadata (alt/title/caption/description). These values are sent with the review payload.",
         },
         detailedInformation: {
-          label: "Detailed information",
+          label: "Technical information",
           placeholder: "Add context, notes, or supporting information for the article",
-          helperText: "Include reader context, audience, or editorial constraints.",
+          helperText: "Provide product specifications and technical characteristics.",
         },
         summary: {
           label: "Summary",
@@ -119,14 +120,17 @@ export const en = {
           helperText: "Write 120-160 characters, include core benefit and one primary keyword mention.",
         },
         primaryKeyword: {
-          label: "Primary keyword",
+          label: "Primary keyphrase",
           placeholder: "Main target keyphrase",
           helperText: "Choose one keyphrase that best represents the search goal of this article.",
         },
         secondaryKeywords: {
-          label: "Secondary keywords",
+          label: "Product keywords",
           placeholder: "Keywords separated by commas",
           helperText: "Use commas to separate supporting keyphrases.",
+          addAction: "Add",
+          saveAction: "Save",
+          editAction: "Edit",
           primaryContext: "Current primary keyword: {{value}}",
           primaryEmpty: "Primary keyword not provided yet",
         },
@@ -146,8 +150,11 @@ export const en = {
         openImageDialog: "Manage images ({{count}})",
         dialogTitle: "Image Gallery",
         fields: {
-          nameLabel: "Image name",
-          mimeTypeLabel: "MIME type",
+          fileNameLabel: "Uploaded file name",
+          altTextLabel: "Alternative text",
+          titleLabel: "Title",
+          captionLabel: "Caption",
+          descriptionLabel: "Description",
         },
       },
       history: {
@@ -175,6 +182,7 @@ export const en = {
         advancedScore: "Advanced",
         seoMetadataTitle: "Saved SEO metadata",
         reviewedContentTitle: "Reviewed post content",
+        imageMetadataTitle: "Reviewed image metadata",
         seoTitle: "SEO title",
         metaDescription: "Meta description",
         primaryKeyword: "Primary keyword",

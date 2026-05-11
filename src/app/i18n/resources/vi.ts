@@ -92,13 +92,14 @@ export const vi = {
           helperText: "Nội dung này sẽ được gửi trực tiếp sang API backend để đánh giá.",
         },
         contentImages: {
-          label: "Hình ảnh nội dung",
-          helperText: "Thêm ảnh minh họa có liên quan đến nội dung để tăng chất lượng ngữ cảnh.",
+          label: "Ảnh sản phẩm",
+          helperText:
+            "Khai báo hình ảnh sản phẩm và metadata ảnh (alt/tiêu đề/chú thích/mô tả). Các thông tin này được gửi kèm để phục vụ review bài.",
         },
         detailedInformation: {
-          label: "Thông tin chi tiết",
+          label: "Thông tin kỹ thuật",
           placeholder: "Bổ sung bối cảnh, ghi chú hoặc thông tin hỗ trợ cho bài viết",
-          helperText: "Ghi rõ bối cảnh, đối tượng đọc hoặc yêu cầu biên tập đặc biệt.",
+          helperText: "Mô tả thông số/đặc tính kỹ thuật của sản phẩm.",
         },
         summary: {
           label: "Tóm tắt",
@@ -121,14 +122,17 @@ export const vi = {
           helperText: "Viết 120-160 ký tự, nêu lợi ích chính và chèn từ khóa trọng tâm một lần.",
         },
         primaryKeyword: {
-          label: "Từ khóa chính",
+          label: "Cụm từ khóa chính",
           placeholder: "Cụm từ khóa trọng tâm",
           helperText: "Chọn một cụm từ khóa đại diện rõ nhất cho mục tiêu tìm kiếm của bài viết.",
         },
         secondaryKeywords: {
-          label: "Từ khóa phụ",
+          label: "Các từ khóa sản phẩm",
           placeholder: "Các từ khóa, ngăn cách bằng dấu phẩy",
           helperText: "Dùng dấu phẩy để tách các từ khóa hỗ trợ.",
+          addAction: "Thêm",
+          saveAction: "Lưu",
+          editAction: "Sửa",
           primaryContext: "Từ khóa chính hiện tại: {{value}}",
           primaryEmpty: "Chưa nhập từ khóa chính",
         },
@@ -148,8 +152,11 @@ export const vi = {
         openImageDialog: "Quản lý ảnh ({{count}})",
         dialogTitle: "Danh sách hình ảnh",
         fields: {
-          nameLabel: "Tên hình ảnh",
-          mimeTypeLabel: "Định dạng ảnh",
+          fileNameLabel: "Tên file upload",
+          altTextLabel: "Văn bản thay thế",
+          titleLabel: "Tiêu đề",
+          captionLabel: "Chú thích",
+          descriptionLabel: "Mô tả",
         },
       },
       history: {
@@ -177,6 +184,7 @@ export const vi = {
         advancedScore: "Nâng cao",
         seoMetadataTitle: "Metadata SEO đã lưu",
         reviewedContentTitle: "Nội dung bài đã đánh giá",
+        imageMetadataTitle: "Metadata hình ảnh đã đánh giá",
         seoTitle: "Tiêu đề SEO",
         metaDescription: "Meta description",
         primaryKeyword: "Từ khóa chính",

@@ -53,6 +53,10 @@ const readImageFile = (file: File): Promise<ImportedImage> =>
         name: file.name,
         mimeType: file.type,
         dataUrl: reader.result,
+        altText: "",
+        title: "",
+        caption: "",
+        description: "",
       });
     };
 
@@ -95,7 +99,18 @@ export type SeoReviewWorkspace = {
   handlePasteImages: (event: ClipboardEvent<HTMLDivElement>) => Promise<void>;
   handleDropImages: (event: DragEvent<HTMLDivElement>) => Promise<void>;
   removeImage: (imageId: string) => void;
-  updateImageInfo: (imageId: string, updates: { name?: string; mimeType?: string }) => void;
+  updateImageInfo: (
+    imageId: string,
+    updates: {
+      name?: string;
+      mimeType?: string;
+      altText?: string;
+      title?: string;
+      caption?: string;
+      description?: string;
+    },
+  ) => void;
+  addImagesFromFiles: (files: File[]) => Promise<void>;
   runReview: () => Promise<void>;
 };
 
@@ -214,7 +229,17 @@ export function useSeoReviewWorkspace(): SeoReviewWorkspace {
     }));
   };
 
-  const updateImageInfo = (imageId: string, updates: { name?: string; mimeType?: string }) => {
+  const updateImageInfo = (
+    imageId: string,
+    updates: {
+      name?: string;
+      mimeType?: string;
+      altText?: string;
+      title?: string;
+      caption?: string;
+      description?: string;
+    },
+  ) => {
     setForm((current) => ({
       ...current,
       contentImages: current.contentImages.map((image) =>
@@ -223,6 +248,10 @@ export function useSeoReviewWorkspace(): SeoReviewWorkspace {
               ...image,
               name: updates.name ?? image.name,
               mimeType: updates.mimeType ?? image.mimeType,
+              altText: updates.altText ?? image.altText,
+              title: updates.title ?? image.title,
+              caption: updates.caption ?? image.caption,
+              description: updates.description ?? image.description,
             }
           : image,
       ),
@@ -280,6 +309,7 @@ export function useSeoReviewWorkspace(): SeoReviewWorkspace {
     handleDropImages,
     removeImage,
     updateImageInfo,
+    addImagesFromFiles: handleAddImages,
     runReview,
   };
 }

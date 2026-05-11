@@ -1,3 +1,4 @@
+import { createPortal } from "react-dom";
 import { useTranslation } from "react-i18next";
 import { useEffect, useMemo, useState } from "react";
 import type { ChangeEvent, ClipboardEvent, DragEvent, RefObject } from "react";
@@ -12,7 +13,17 @@ type ContentImagesFieldProps = {
   onPasteImages: (event: ClipboardEvent<HTMLDivElement>) => Promise<void>;
   onDropImages: (event: DragEvent<HTMLDivElement>) => Promise<void>;
   onRemoveImage: (imageId: string) => void;
-  onUpdateImageInfo: (imageId: string, updates: { name?: string; mimeType?: string }) => void;
+  onUpdateImageInfo: (
+    imageId: string,
+    updates: {
+      name?: string;
+      mimeType?: string;
+      altText?: string;
+      title?: string;
+      caption?: string;
+      description?: string;
+    },
+  ) => void;
 };
 
 export function ContentImagesField({
@@ -30,7 +41,10 @@ export function ContentImagesField({
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   const [selectedImageId, setSelectedImageId] = useState<string | null>(null);
   const [imageNameInput, setImageNameInput] = useState("");
-  const [imageMimeInput, setImageMimeInput] = useState("");
+  const [imageAltTextInput, setImageAltTextInput] = useState("");
+  const [imageTitleInput, setImageTitleInput] = useState("");
+  const [imageCaptionInput, setImageCaptionInput] = useState("");
+  const [imageDescriptionInput, setImageDescriptionInput] = useState("");
 
   const selectedImage = useMemo(
     () => images.find((image) => image.id === selectedImageId) ?? null,
@@ -41,7 +55,10 @@ export function ContentImagesField({
     if (images.length === 0) {
       setSelectedImageId(null);
       setImageNameInput("");
-      setImageMimeInput("");
+      setImageAltTextInput("");
+      setImageTitleInput("");
+      setImageCaptionInput("");
+      setImageDescriptionInput("");
       return;
     }
 
@@ -49,7 +66,10 @@ export function ContentImagesField({
       const firstImage = images[0];
       setSelectedImageId(firstImage.id);
       setImageNameInput(firstImage.name);
-      setImageMimeInput(firstImage.mimeType);
+      setImageAltTextInput(firstImage.altText);
+      setImageTitleInput(firstImage.title);
+      setImageCaptionInput(firstImage.caption);
+      setImageDescriptionInput(firstImage.description);
       return;
     }
 
@@ -58,18 +78,27 @@ export function ContentImagesField({
       const firstImage = images[0];
       setSelectedImageId(firstImage.id);
       setImageNameInput(firstImage.name);
-      setImageMimeInput(firstImage.mimeType);
+      setImageAltTextInput(firstImage.altText);
+      setImageTitleInput(firstImage.title);
+      setImageCaptionInput(firstImage.caption);
+      setImageDescriptionInput(firstImage.description);
       return;
     }
 
     setImageNameInput(current.name);
-    setImageMimeInput(current.mimeType);
+    setImageAltTextInput(current.altText);
+    setImageTitleInput(current.title);
+    setImageCaptionInput(current.caption);
+    setImageDescriptionInput(current.description);
   }, [images, selectedImageId]);
 
   const handleSelectImage = (image: ImportedImage) => {
     setSelectedImageId(image.id);
     setImageNameInput(image.name);
-    setImageMimeInput(image.mimeType);
+    setImageAltTextInput(image.altText);
+    setImageTitleInput(image.title);
+    setImageCaptionInput(image.caption);
+    setImageDescriptionInput(image.description);
   };
 
   return (
@@ -161,7 +190,7 @@ export function ContentImagesField({
         </div>
       ) : null}
 
-      {isDialogOpen ? (
+      {isDialogOpen ? createPortal(
         <div className="image-dialog__backdrop" role="presentation" onClick={() => setIsDialogOpen(false)}>
           <div
             className="image-dialog"
@@ -195,7 +224,7 @@ export function ContentImagesField({
 
               <div className="image-dialog__meta">
                 <label className="field">
-                  <span className="field__label">{t("seoReview.imageInput.fields.nameLabel")}</span>
+                  <span className="field__label">{t("seoReview.imageInput.fields.fileNameLabel")}</span>
                   <input
                     className="field__control"
                     value={imageNameInput}
@@ -210,15 +239,61 @@ export function ContentImagesField({
                 </label>
 
                 <label className="field">
-                  <span className="field__label">{t("seoReview.imageInput.fields.mimeTypeLabel")}</span>
+                  <span className="field__label">{t("seoReview.imageInput.fields.altTextLabel")}</span>
                   <input
                     className="field__control"
-                    value={imageMimeInput}
+                    value={imageAltTextInput}
                     onChange={(event) => {
                       const nextValue = event.target.value;
-                      setImageMimeInput(nextValue);
+                      setImageAltTextInput(nextValue);
                       if (selectedImage) {
-                        onUpdateImageInfo(selectedImage.id, { mimeType: nextValue });
+                        onUpdateImageInfo(selectedImage.id, { altText: nextValue });
+                      }
+                    }}
+                  />
+                </label>
+
+                <label className="field">
+                  <span className="field__label">{t("seoReview.imageInput.fields.titleLabel")}</span>
+                  <input
+                    className="field__control"
+                    value={imageTitleInput}
+                    onChange={(event) => {
+                      const nextValue = event.target.value;
+                      setImageTitleInput(nextValue);
+                      if (selectedImage) {
+                        onUpdateImageInfo(selectedImage.id, { title: nextValue });
+                      }
+                    }}
+                  />
+                </label>
+
+                <label className="field">
+                  <span className="field__label">{t("seoReview.imageInput.fields.captionLabel")}</span>
+                  <input
+                    className="field__control"
+                    value={imageCaptionInput}
+                    onChange={(event) => {
+                      const nextValue = event.target.value;
+                      setImageCaptionInput(nextValue);
+                      if (selectedImage) {
+                        onUpdateImageInfo(selectedImage.id, { caption: nextValue });
+                      }
+                    }}
+                  />
+                </label>
+
+                <label className="field">
+                  <span className="field__label">{t("seoReview.imageInput.fields.descriptionLabel")}</span>
+                  <textarea
+                    className="field__control"
+                    rows={4}
+                    value={imageDescriptionInput}
+                    onChange={(event) => {
+                      const nextValue = event.target.value;
+                      setImageDescriptionInput(nextValue);
+                      if (selectedImage) {
+                        onUpdateImageInfo(selectedImage.id, { description: nextValue });
                       }
                     }}
                   />
@@ -236,7 +311,8 @@ export function ContentImagesField({
               </div>
             </div>
           </div>
-        </div>
+        </div>,
+        document.body
       ) : null}
     </div>
   );

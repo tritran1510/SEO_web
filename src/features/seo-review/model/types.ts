@@ -12,6 +12,10 @@ export type ImportedImage = {
   name: string;
   mimeType: string;
   dataUrl: string;
+  altText: string;
+  title: string;
+  caption: string;
+  description: string;
 };
 
 export type ArticleFormData = {
@@ -143,8 +147,20 @@ export type ReviewHistoryItem = {
   seo_title?: string | null;
   meta_description?: string | null;
   primary_keyword?: string | null;
+  slug?: string | null;
   secondary_keywords?: string | null;
   synonyms?: string | null;
+  image_metadata?: Array<{
+    id: string;
+    name: string;
+    mimeType: string;
+    dataUrl: string;
+    altText: string;
+    title: string;
+    caption: string;
+    description: string;
+    sortOrder: number;
+  }> | null;
   improvement_recommendations?: string[] | null;
   checklist_results?: Array<{
     checkName?: string;
