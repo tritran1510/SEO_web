@@ -46,6 +46,80 @@ function pickStringArray(source: Record<string, unknown>, keys: string[]): strin
   return [];
 }
 
+type HistoryImageMetadata = {
+  id: string;
+  name: string;
+  mimeType: string;
+  dataUrl: string;
+  altText: string;
+  title: string;
+  caption: string;
+  description: string;
+  sortOrder: number;
+};
+
+function pickImageMetadata(source: Record<string, unknown>): HistoryImageMetadata[] {
+  const rawValue = source.image_metadata;
+  if (!Array.isArray(rawValue)) {
+    return [];
+  }
+
+  return rawValue
+    .map((item) => {
+      if (!item || typeof item !== "object") {
+        return null;
+      }
+      const record = item as Record<string, unknown>;
+      const dataUrl = typeof record.dataUrl === "string" ? record.dataUrl : "";
+      if (!dataUrl) {
+        return null;
+      }
+
+      return {
+        id: typeof record.id === "string" && record.id.trim() ? record.id : dataUrl,
+        name: typeof record.name === "string" ? record.name : "",
+        mimeType: typeof record.mimeType === "string" ? record.mimeType : "",
+        dataUrl,
+        altText: typeof record.altText === "string" ? record.altText : "",
+        title: typeof record.title === "string" ? record.title : "",
+        caption: typeof record.caption === "string" ? record.caption : "",
+        description: typeof record.description === "string" ? record.description : "",
+        sortOrder: typeof record.sortOrder === "number" ? record.sortOrder : 0,
+      } satisfies HistoryImageMetadata;
+    })
+    .filter((item): item is HistoryImageMetadata => item !== null)
+    .sort((left, right) => left.sortOrder - right.sortOrder);
+}
+
+function sanitizeHtmlForHistory(rawHtml: string): string {
+  if (!rawHtml.trim()) {
+    return "";
+  }
+
+  const parser = new DOMParser();
+  const documentNode = parser.parseFromString(rawHtml, "text/html");
+  const blockedTags = ["script", "style", "iframe", "object", "embed"];
+  blockedTags.forEach((tagName) => {
+    documentNode.querySelectorAll(tagName).forEach((node) => node.remove());
+  });
+
+  documentNode.querySelectorAll("*").forEach((element) => {
+    Array.from(element.attributes).forEach((attribute) => {
+      const attributeName = attribute.name.toLowerCase();
+      const value = attribute.value.trim().toLowerCase();
+      if (attributeName.startsWith("on")) {
+        element.removeAttribute(attribute.name);
+        return;
+      }
+      if ((attributeName === "href" || attributeName === "src") && value.startsWith("javascript:")) {
+        element.removeAttribute(attribute.name);
+      }
+    });
+  });
+
+  return documentNode.body.innerHTML;
+}
+
 export function ReviewHistory({ articleId, onBackToList, onOpenReviewDetail }: ReviewHistoryProps) {
   const { t } = useTranslation();
   const [data, setData] = useState<ReviewHistoryResponse | null>(null);
@@ -114,7 +188,7 @@ export function ReviewHistory({ articleId, onBackToList, onOpenReviewDetail }: R
           <div className="history-list">
             {data.reviews.map((review) => (
               <article key={review.review_id} className="history-card">
-                <h3>Review #{review.review_id}</h3>
+                <h3>{t("seoReview.history.reviewWithId", { id: review.review_id })}</h3>
                 <p className="history-meta">
                   {t("seoReview.history.reviewAtTime")}: {formatDateTime(review.created_at)}
                 </p>
@@ -188,11 +262,13 @@ export function ReviewDetail({ history, review, onBack }: ReviewDetailProps) {
   const seoTitle = pickString(reviewRecord, ["seo_title", "seoTitle"]);
   const metaDescription = pickString(reviewRecord, ["meta_description", "metaDescription"]);
   const primaryKeyword = pickString(reviewRecord, ["primary_keyword", "primaryKeyword"]);
+  const reviewedSlug = pickString(reviewRecord, ["slug"]);
   const secondaryKeywords = pickStringArray(reviewRecord, ["secondary_keywords", "secondaryKeywords"]);
   const synonyms = pickStringArray(reviewRecord, ["synonyms"]);
   const summary = pickString(reviewRecord, ["summary"]);
   const detailedInformation = pickString(reviewRecord, ["detailed_information", "detailedInformation"]);
   const articleContent = pickString(reviewRecord, ["article_content", "articleContent"]);
+  const imageMetadata = pickImageMetadata(reviewRecord);
 
   const recommendations = pickStringArray(reviewRecord, [
     "improvement_recommendations",
@@ -207,6 +283,7 @@ export function ReviewDetail({ history, review, onBack }: ReviewDetailProps) {
   const hasSeoMetadata =
     Boolean(seoTitle) ||
     Boolean(metaDescription) ||
+    Boolean(reviewedSlug) ||
     Boolean(primaryKeyword) ||
     secondaryKeywords.length > 0 ||
     synonyms.length > 0;
@@ -215,10 +292,12 @@ export function ReviewDetail({ history, review, onBack }: ReviewDetailProps) {
     Boolean(summary) ||
     Boolean(detailedInformation) ||
     Boolean(articleContent);
+  const hasImageMetadata = imageMetadata.length > 0;
 
   const hasExtraDetails =
     hasSeoMetadata ||
     hasReviewedContent ||
+    hasImageMetadata ||
     recommendations.length > 0 ||
     checklist.length > 0;
 
@@ -326,6 +405,9 @@ export function ReviewDetail({ history, review, onBack }: ReviewDetailProps) {
                 <strong>{t("seoReview.history.seoTitle")}:</strong> {seoTitle || "-"}
               </p>
               <p className="history-meta">
+                <strong>{t("seoReview.history.slug")}:</strong> {reviewedSlug || "-"}
+              </p>
+              <p className="history-meta">
                 <strong>{t("seoReview.history.metaDescription")}:</strong> {metaDescription || "-"}
               </p>
               <p className="history-meta">
@@ -367,6 +449,34 @@ export function ReviewDetail({ history, review, onBack }: ReviewDetailProps) {
           </article>
         ) : null}
 
+        {hasImageMetadata ? (
+          <article className="history-card history-card--full">
+            <h3>{t("seoReview.history.imageMetadataTitle")}</h3>
+            <div className="image-grid image-grid--compact">
+              {imageMetadata.map((image) => (
+                <article key={image.id} className="image-card">
+                  <img src={image.dataUrl} alt={image.altText || image.name} className="image-card__preview" />
+                  <div className="image-card__footer">
+                    <p className="image-card__name">{image.name || "-"}</p>
+                    <p className="image-card__meta">
+                      <strong>{t("seoReview.imageInput.fields.altTextLabel")}:</strong> {image.altText || "-"}
+                    </p>
+                    <p className="image-card__meta">
+                      <strong>{t("seoReview.imageInput.fields.titleLabel")}:</strong> {image.title || "-"}
+                    </p>
+                    <p className="image-card__meta">
+                      <strong>{t("seoReview.imageInput.fields.captionLabel")}:</strong> {image.caption || "-"}
+                    </p>
+                    <p className="image-card__meta">
+                      <strong>{t("seoReview.imageInput.fields.descriptionLabel")}:</strong> {image.description || "-"}
+                    </p>
+                  </div>
+                </article>
+              ))}
+            </div>
+          </article>
+        ) : null}
+
         {hasReviewedContent ? (
           <article className="history-card history-card--full">
             <h3>{t("seoReview.history.reviewedContentTitle")}</h3>
@@ -375,19 +485,40 @@ export function ReviewDetail({ history, review, onBack }: ReviewDetailProps) {
                 <p className="history-meta">
                   <strong>{t("seoReview.history.summary")}:</strong>
                 </p>
-                <p className="history-block">{summary || "-"}</p>
+                {summary ? (
+                  <div
+                    className="history-block"
+                    dangerouslySetInnerHTML={{ __html: sanitizeHtmlForHistory(summary) }}
+                  />
+                ) : (
+                  <p className="history-block">-</p>
+                )}
               </div>
               <div>
                 <p className="history-meta">
                   <strong>{t("seoReview.history.detailedInformation")}:</strong>
                 </p>
-                <p className="history-block">{detailedInformation || "-"}</p>
+                {detailedInformation ? (
+                  <div
+                    className="history-block"
+                    dangerouslySetInnerHTML={{ __html: sanitizeHtmlForHistory(detailedInformation) }}
+                  />
+                ) : (
+                  <p className="history-block">-</p>
+                )}
               </div>
               <div>
                 <p className="history-meta">
                   <strong>{t("seoReview.history.articleContent")}:</strong>
                 </p>
-                <p className="history-block">{articleContent || "-"}</p>
+                {articleContent ? (
+                  <div
+                    className="history-block"
+                    dangerouslySetInnerHTML={{ __html: sanitizeHtmlForHistory(articleContent) }}
+                  />
+                ) : (
+                  <p className="history-block">-</p>
+                )}
               </div>
             </div>
           </article>

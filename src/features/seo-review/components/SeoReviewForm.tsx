@@ -1,5 +1,7 @@
+import { useMemo, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { Field } from "../../../shared/ui/Field";
+import { RichTextField } from "../../../shared/ui/RichTextField";
 import { ContentImagesField } from "./ContentImagesField";
 import type { SeoReviewWorkspace } from "../model/useSeoReviewWorkspace";
 
@@ -10,6 +12,8 @@ type SeoReviewFormProps = {
 export function SeoReviewForm({ workspace }: SeoReviewFormProps) {
   const { t } = useTranslation();
   const { form } = workspace;
+  const [keywordInput, setKeywordInput] = useState("");
+  const [editingKeywordIndex, setEditingKeywordIndex] = useState<number | null>(null);
   const articleTitleField = workspace.getFieldPresentation("articleTitle");
   const permanentLinkField = workspace.getFieldPresentation("permanentLink");
   const articleContentField = workspace.getFieldPresentation("articleContent");
@@ -22,6 +26,44 @@ export function SeoReviewForm({ workspace }: SeoReviewFormProps) {
   const primaryKeywordField = workspace.getFieldPresentation("primaryKeyword");
   const secondaryKeywordsField = workspace.getFieldPresentation("secondaryKeywords");
   const synonymsField = workspace.getFieldPresentation("synonyms");
+  const secondaryKeywordList = useMemo(
+    () =>
+      form.keywordSet.secondaryKeywords
+        .split(",")
+        .map((keyword) => keyword.trim())
+        .filter((keyword) => keyword.length > 0),
+    [form.keywordSet.secondaryKeywords],
+  );
+
+  const commitSecondaryKeyword = () => {
+    const normalizedKeyword = keywordInput.trim();
+    if (normalizedKeyword.length === 0) {
+      return;
+    }
+
+    const nextKeywords =
+      editingKeywordIndex === null
+        ? [...secondaryKeywordList, normalizedKeyword]
+        : secondaryKeywordList.map((item, index) => (index === editingKeywordIndex ? normalizedKeyword : item));
+
+    workspace.updateKeywordField("secondaryKeywords", nextKeywords.join(", "));
+    setKeywordInput("");
+    setEditingKeywordIndex(null);
+  };
+
+  const editSecondaryKeyword = (index: number) => {
+    setKeywordInput(secondaryKeywordList[index] ?? "");
+    setEditingKeywordIndex(index);
+  };
+
+  const removeSecondaryKeyword = (index: number) => {
+    const nextKeywords = secondaryKeywordList.filter((_, itemIndex) => itemIndex !== index);
+    workspace.updateKeywordField("secondaryKeywords", nextKeywords.join(", "));
+    if (editingKeywordIndex === index) {
+      setKeywordInput("");
+      setEditingKeywordIndex(null);
+    }
+  };
 
   return (
     <section className="editor">
@@ -65,16 +107,17 @@ export function SeoReviewForm({ workspace }: SeoReviewFormProps) {
             issues={permanentLinkField.issues}
           />
           <div className="form-grid__full">
-            <Field
-              as="textarea"
-              rows={8}
+            <RichTextField
               label={t("seoReview.fields.articleContent.label")}
               value={form.articleContent}
-              onChange={(event) => workspace.updateField("articleContent", event.target.value)}
+              onChange={(nextValue) => workspace.updateField("articleContent", nextValue)}
               placeholder={t("seoReview.fields.articleContent.placeholder")}
               helperText={t("seoReview.fields.articleContent.helperText")}
               tone={articleContentField.tone}
               issues={articleContentField.issues}
+              minHeight={220}
+              mediaItems={form.contentImages}
+              onAddMediaFiles={workspace.addImagesFromFiles}
             />
           </div>
           <div className="form-grid__full">
@@ -87,64 +130,88 @@ export function SeoReviewForm({ workspace }: SeoReviewFormProps) {
               onPasteImages={workspace.handlePasteImages}
               onDropImages={workspace.handleDropImages}
               onRemoveImage={workspace.removeImage}
+              onUpdateImageInfo={workspace.updateImageInfo}
+            />
+          </div>
+          <div className="keyword-inline-field form-grid__full">
+            <label className="field__label">{t("seoReview.fields.secondaryKeywords.label")}</label>
+            <div className="keyword-list-editor">
+              <input
+                type="text"
+                className={
+                  secondaryKeywordsField.tone === "attention" ? "field__control field__control--attention" : "field__control"
+                }
+                value={keywordInput}
+                onChange={(event) => setKeywordInput(event.target.value)}
+                onKeyDown={(event) => {
+                  if (event.key === "Enter") {
+                    event.preventDefault();
+                    commitSecondaryKeyword();
+                  }
+                }}
+                placeholder={t("seoReview.fields.secondaryKeywords.placeholder")}
+              />
+              <button type="button" className="ghost-button" onClick={commitSecondaryKeyword}>
+                {editingKeywordIndex === null
+                  ? t("seoReview.fields.secondaryKeywords.addAction")
+                  : t("seoReview.fields.secondaryKeywords.saveAction")}
+              </button>
+            </div>
+            <span className="field__helper">{t("seoReview.fields.secondaryKeywords.helperText")}</span>
+            <div className="keyword-chip-list">
+              {secondaryKeywordList.map((keyword, index) => (
+                <div key={`${keyword}-${index}`} className="keyword-chip">
+                  <span>{keyword}</span>
+                  <button type="button" className="keyword-chip__action" onClick={() => editSecondaryKeyword(index)}>
+                    {t("seoReview.fields.secondaryKeywords.editAction")}
+                  </button>
+                  <button type="button" className="keyword-chip__action" onClick={() => removeSecondaryKeyword(index)}>
+                    {t("common.actions.remove")}
+                  </button>
+                </div>
+              ))}
+            </div>
+            {secondaryKeywordsField.issues.length > 0 ? (
+              <ul className="field__issues">
+                {secondaryKeywordsField.issues.slice(0, 2).map((issue) => (
+                  <li key={issue}>{issue}</li>
+                ))}
+              </ul>
+            ) : null}
+          </div>
+          <div className="keyword-inline-field form-grid__full">
+            <Field
+              label={t("seoReview.fields.primaryKeyword.label")}
+              value={form.keywordSet.primaryKeyword}
+              onChange={(event) => workspace.updateKeywordField("primaryKeyword", event.target.value)}
+              placeholder={t("seoReview.fields.primaryKeyword.placeholder")}
+              helperText={t("seoReview.fields.primaryKeyword.helperText")}
+              tone={primaryKeywordField.tone}
+              issues={primaryKeywordField.issues}
             />
           </div>
           <div className="form-grid__full">
             <Field
-              as="textarea"
-              rows={4}
-              label={t("seoReview.fields.detailedInformation.label")}
-              value={form.detailedInformation}
-              onChange={(event) => workspace.updateField("detailedInformation", event.target.value)}
-              placeholder={t("seoReview.fields.detailedInformation.placeholder")}
-              helperText={t("seoReview.fields.detailedInformation.helperText")}
-              tone={detailedInformationField.tone}
-              issues={detailedInformationField.issues}
+              label={t("seoReview.fields.seoTitle.label")}
+              value={form.keywordSet.seoTitle}
+              onChange={(event) => workspace.updateKeywordField("seoTitle", event.target.value)}
+              placeholder={t("seoReview.fields.seoTitle.placeholder")}
+              helperText={t("seoReview.fields.seoTitle.helperText")}
+              tone={seoTitleField.tone}
+              issues={seoTitleField.issues}
             />
           </div>
           <div className="form-grid__full">
             <Field
-              as="textarea"
-              rows={3}
-              label={t("seoReview.fields.summary.label")}
-              value={form.summary}
-              onChange={(event) => workspace.updateField("summary", event.target.value)}
-              placeholder={t("seoReview.fields.summary.placeholder")}
-              helperText={t("seoReview.fields.summary.helperText")}
-              tone={summaryField.tone}
-              issues={summaryField.issues}
+              label={t("seoReview.fields.slug.label")}
+              value={form.keywordSet.slug}
+              onChange={(event) => workspace.updateKeywordField("slug", event.target.value)}
+              placeholder={t("seoReview.fields.slug.placeholder")}
+              helperText={t("seoReview.fields.slug.helperText")}
+              tone={slugField.tone}
+              issues={slugField.issues}
             />
           </div>
-        </div>
-      </div>
-
-      <div className="panel">
-        <div className="panel__header">
-          <div>
-            <p className="eyebrow">{t("seoReview.form.keywordSetEyebrow")}</p>
-            <h2>{t("seoReview.form.seoMetadataTitle")}</h2>
-          </div>
-        </div>
-
-        <div className="form-grid">
-          <Field
-            label={t("seoReview.fields.seoTitle.label")}
-            value={form.keywordSet.seoTitle}
-            onChange={(event) => workspace.updateKeywordField("seoTitle", event.target.value)}
-            placeholder={t("seoReview.fields.seoTitle.placeholder")}
-            helperText={t("seoReview.fields.seoTitle.helperText")}
-            tone={seoTitleField.tone}
-            issues={seoTitleField.issues}
-          />
-          <Field
-            label={t("seoReview.fields.slug.label")}
-            value={form.keywordSet.slug}
-            onChange={(event) => workspace.updateKeywordField("slug", event.target.value)}
-            placeholder={t("seoReview.fields.slug.placeholder")}
-            helperText={t("seoReview.fields.slug.helperText")}
-            tone={slugField.tone}
-            issues={slugField.issues}
-          />
           <div className="form-grid__full">
             <Field
               as="textarea"
@@ -158,28 +225,6 @@ export function SeoReviewForm({ workspace }: SeoReviewFormProps) {
               issues={metaDescriptionField.issues}
             />
           </div>
-          <div className="keyword-inline-field">
-            <Field
-              label={t("seoReview.fields.primaryKeyword.label")}
-              value={form.keywordSet.primaryKeyword}
-              onChange={(event) => workspace.updateKeywordField("primaryKeyword", event.target.value)}
-              placeholder={t("seoReview.fields.primaryKeyword.placeholder")}
-              helperText={t("seoReview.fields.primaryKeyword.helperText")}
-              tone={primaryKeywordField.tone}
-              issues={primaryKeywordField.issues}
-            />
-          </div>
-          <div className="keyword-inline-field">
-            <Field
-              label={t("seoReview.fields.secondaryKeywords.label")}
-              value={form.keywordSet.secondaryKeywords}
-              onChange={(event) => workspace.updateKeywordField("secondaryKeywords", event.target.value)}
-              placeholder={t("seoReview.fields.secondaryKeywords.placeholder")}
-              helperText={t("seoReview.fields.secondaryKeywords.helperText")}
-              tone={secondaryKeywordsField.tone}
-              issues={secondaryKeywordsField.issues}
-            />
-          </div>
           <div className="form-grid__full">
             <Field
               label={t("seoReview.fields.synonyms.label")}
@@ -189,6 +234,34 @@ export function SeoReviewForm({ workspace }: SeoReviewFormProps) {
               helperText={t("seoReview.fields.synonyms.helperText")}
               tone={synonymsField.tone}
               issues={synonymsField.issues}
+            />
+          </div>
+          <div className="form-grid__full">
+            <RichTextField
+              label={t("seoReview.fields.detailedInformation.label")}
+              value={form.detailedInformation}
+              onChange={(nextValue) => workspace.updateField("detailedInformation", nextValue)}
+              placeholder={t("seoReview.fields.detailedInformation.placeholder")}
+              helperText={t("seoReview.fields.detailedInformation.helperText")}
+              tone={detailedInformationField.tone}
+              issues={detailedInformationField.issues}
+              minHeight={140}
+              mediaItems={form.contentImages}
+              onAddMediaFiles={workspace.addImagesFromFiles}
+            />
+          </div>
+          <div className="form-grid__full">
+            <RichTextField
+              label={t("seoReview.fields.summary.label")}
+              value={form.summary}
+              onChange={(nextValue) => workspace.updateField("summary", nextValue)}
+              placeholder={t("seoReview.fields.summary.placeholder")}
+              helperText={t("seoReview.fields.summary.helperText")}
+              tone={summaryField.tone}
+              issues={summaryField.issues}
+              minHeight={120}
+              mediaItems={form.contentImages}
+              onAddMediaFiles={workspace.addImagesFromFiles}
             />
           </div>
         </div>

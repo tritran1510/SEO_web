@@ -1,6 +1,8 @@
 import { useTranslation } from "react-i18next";
 import { useState } from "react";
 import { switchLanguage } from "./i18n/i18n";
+import vnFlag from "../assets/svg/vietnam_flag.svg";
+import enFlag from "../assets/svg/us_flag.svg";
 import { SeoReviewForm } from "../features/seo-review/components/SeoReviewForm";
 import { SeoReviewReport } from "../features/seo-review/components/SeoReviewReport";
 import {
@@ -35,7 +37,7 @@ function App() {
               void switchLanguage("vi");
             }}
           >
-            🇻🇳
+            <img src={vnFlag} width="32" style={{ borderRadius: "2px" }} alt={t("common.language.vietnameseFlagAlt")} />
           </button>
           <button
             type="button"
@@ -46,7 +48,7 @@ function App() {
               void switchLanguage("en");
             }}
           >
-            🇬🇧
+            <img src={enFlag} width="32" style={{ borderRadius: "2px" }} alt={t("common.language.englishFlagAlt")} />
           </button>
         </div>
       </div>

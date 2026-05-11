@@ -53,6 +53,10 @@ const readImageFile = (file: File): Promise<ImportedImage> =>
         name: file.name,
         mimeType: file.type,
         dataUrl: reader.result,
+        altText: "",
+        title: "",
+        caption: "",
+        description: "",
       });
     };
 
@@ -95,6 +99,18 @@ export type SeoReviewWorkspace = {
   handlePasteImages: (event: ClipboardEvent<HTMLDivElement>) => Promise<void>;
   handleDropImages: (event: DragEvent<HTMLDivElement>) => Promise<void>;
   removeImage: (imageId: string) => void;
+  updateImageInfo: (
+    imageId: string,
+    updates: {
+      name?: string;
+      mimeType?: string;
+      altText?: string;
+      title?: string;
+      caption?: string;
+      description?: string;
+    },
+  ) => void;
+  addImagesFromFiles: (files: File[]) => Promise<void>;
   runReview: () => Promise<void>;
 };
 
@@ -213,6 +229,35 @@ export function useSeoReviewWorkspace(): SeoReviewWorkspace {
     }));
   };
 
+  const updateImageInfo = (
+    imageId: string,
+    updates: {
+      name?: string;
+      mimeType?: string;
+      altText?: string;
+      title?: string;
+      caption?: string;
+      description?: string;
+    },
+  ) => {
+    setForm((current) => ({
+      ...current,
+      contentImages: current.contentImages.map((image) =>
+        image.id === imageId
+          ? {
+              ...image,
+              name: updates.name ?? image.name,
+              mimeType: updates.mimeType ?? image.mimeType,
+              altText: updates.altText ?? image.altText,
+              title: updates.title ?? image.title,
+              caption: updates.caption ?? image.caption,
+              description: updates.description ?? image.description,
+            }
+          : image,
+      ),
+    }));
+  };
+
   const handleFileSelection = async (event: ChangeEvent<HTMLInputElement>) => {
     const files = event.target.files ? Array.from(event.target.files) : [];
     if (files.length > 0) {
@@ -263,6 +308,8 @@ export function useSeoReviewWorkspace(): SeoReviewWorkspace {
     handlePasteImages,
     handleDropImages,
     removeImage,
+    updateImageInfo,
+    addImagesFromFiles: handleAddImages,
     runReview,
   };
 }
