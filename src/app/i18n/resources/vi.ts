@@ -243,6 +243,7 @@ export const vi = {
       },
       errors: {
         reviewFailed: "Không thể tạo kết quả đánh giá SEO.",
+        missingRequiredFields: "Vui lòng điền đủ các trường bắt buộc trước khi chạy đánh giá.",
         invalidPayload: "Dữ liệu gửi sang API không hợp lệ.",
         articleTitleRequired: "Tiêu đề bài viết là bắt buộc.",
         permanentLinkRequired: "Liên kết cố định là bắt buộc.",

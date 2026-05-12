@@ -207,19 +207,16 @@ export function ContentImagesField({
             </div>
 
             <div className="image-dialog__body">
-              <div className="image-grid image-grid--dialog">
-                {images.map((image) => (
-                  <button
-                    key={image.id}
-                    type="button"
-                    className={`image-grid__thumb-button ${
-                      selectedImageId === image.id ? "image-grid__thumb-button--active" : ""
-                    }`}
-                    onClick={() => handleSelectImage(image)}
-                  >
-                    <img src={image.dataUrl} alt={image.name} className="image-card__preview" />
-                  </button>
-                ))}
+              <div className="image-dialog__gallery">
+                <div className="image-dialog__selected-preview">
+                  {selectedImage ? (
+                    <img
+                      src={selectedImage.dataUrl}
+                      alt={selectedImage.name}
+                      className="image-dialog__selected-preview-image"
+                    />
+                  ) : null}
+                </div>
               </div>
 
               <div className="image-dialog__meta">

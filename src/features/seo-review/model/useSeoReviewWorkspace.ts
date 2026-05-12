@@ -73,6 +73,8 @@ function getImageFiles(files: File[]): File[] {
   return files.filter((file) => file.type.startsWith("image/"));
 }
 
+const stripHtml = (value: string): string => value.replace(/<[^>]*>/g, " ").replace(/\s+/g, " ").trim();
+
 export type SeoReviewWorkspace = {
   form: ArticleFormData;
   report: ReviewReport | null;
@@ -121,6 +123,7 @@ export function useSeoReviewWorkspace(): SeoReviewWorkspace {
   const [isReviewing, setIsReviewing] = useState(false);
   const [reviewError, setReviewError] = useState("");
   const [imageError, setImageError] = useState("");
+  const [validationIssues, setValidationIssues] = useState<Partial<Record<ReviewFieldKey, string[]>>>({});
   const fileInputRef = useRef<HTMLInputElement>(null);
 
   const presentedChecklist = useMemo(
@@ -162,6 +165,14 @@ export function useSeoReviewWorkspace(): SeoReviewWorkspace {
 
   const updateField = <K extends ArticleFormField>(name: K, value: ArticleFormData[K]) => {
     setForm((current) => ({ ...current, [name]: value }));
+    setValidationIssues((current) => {
+      if (!current[name]) {
+        return current;
+      }
+      const next = { ...current };
+      delete next[name];
+      return next;
+    });
   };
 
   const updateKeywordField = <K extends KeywordSetField>(
@@ -175,9 +186,22 @@ export function useSeoReviewWorkspace(): SeoReviewWorkspace {
         [name]: value,
       },
     }));
+    const fieldName = name as ReviewFieldKey;
+    setValidationIssues((current) => {
+      if (!current[fieldName]) {
+        return current;
+      }
+      const next = { ...current };
+      delete next[fieldName];
+      return next;
+    });
   };
 
-  const getFieldIssues = (field: ReviewFieldKey): string[] => fieldFeedbackMap.get(field) ?? EMPTY_ISSUES;
+  const getFieldIssues = (field: ReviewFieldKey): string[] => {
+    const backendIssues = fieldFeedbackMap.get(field) ?? EMPTY_ISSUES;
+    const localIssues = validationIssues[field] ?? EMPTY_ISSUES;
+    return [...localIssues, ...backendIssues];
+  };
 
   const getFieldPresentation = (field: ReviewFieldKey): FieldPresentation => {
     const issues = getFieldIssues(field);
@@ -287,6 +311,34 @@ export function useSeoReviewWorkspace(): SeoReviewWorkspace {
   };
 
   const runReview = async () => {
+    const nextValidationIssues: Partial<Record<ReviewFieldKey, string[]>> = {};
+
+    if (!form.articleTitle.trim()) {
+      nextValidationIssues.articleTitle = [t("seoReview.errors.articleTitleRequired")];
+    }
+
+    if (!form.permanentLink.trim()) {
+      nextValidationIssues.permanentLink = [t("seoReview.errors.permanentLinkRequired")];
+    }
+
+    if (!stripHtml(form.articleContent)) {
+      nextValidationIssues.articleContent = [t("seoReview.errors.articleContentRequired")];
+    }
+
+    if (!stripHtml(form.summary)) {
+      nextValidationIssues.summary = [t("seoReview.errors.summaryRequired")];
+    }
+
+    if (!form.keywordSet.primaryKeyword.trim()) {
+      nextValidationIssues.primaryKeyword = [t("seoReview.errors.primaryKeywordRequired")];
+    }
+
+    setValidationIssues(nextValidationIssues);
+    if (Object.keys(nextValidationIssues).length > 0) {
+      setReviewError(t("seoReview.errors.missingRequiredFields"));
+      return;
+    }
+
     await reviewContent(form);
   };
   return {

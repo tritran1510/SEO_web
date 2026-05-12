@@ -241,6 +241,7 @@ export const en = {
       },
       errors: {
         reviewFailed: "Could not generate the SEO review.",
+        missingRequiredFields: "Please complete required fields before running review.",
         invalidPayload: "Invalid review payload.",
         articleTitleRequired: "Article title is required.",
         permanentLinkRequired: "Permanent link is required.",

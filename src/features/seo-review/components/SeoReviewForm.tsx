@@ -1,4 +1,4 @@
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { Field } from "../../../shared/ui/Field";
 import { RichTextField } from "../../../shared/ui/RichTextField";
@@ -14,6 +14,8 @@ export function SeoReviewForm({ workspace }: SeoReviewFormProps) {
   const { form } = workspace;
   const [keywordInput, setKeywordInput] = useState("");
   const [editingKeywordIndex, setEditingKeywordIndex] = useState<number | null>(null);
+  const [snackbarMessage, setSnackbarMessage] = useState("");
+  const [isSnackbarLeaving, setIsSnackbarLeaving] = useState(false);
   const articleTitleField = workspace.getFieldPresentation("articleTitle");
   const permanentLinkField = workspace.getFieldPresentation("permanentLink");
   const articleContentField = workspace.getFieldPresentation("articleContent");
@@ -64,6 +66,23 @@ export function SeoReviewForm({ workspace }: SeoReviewFormProps) {
       setEditingKeywordIndex(null);
     }
   };
+
+  useEffect(() => {
+    if (!workspace.reviewError) {
+      return;
+    }
+
+    setIsSnackbarLeaving(false);
+    setSnackbarMessage(workspace.reviewError);
+    const timeoutId = window.setTimeout(() => {
+      setIsSnackbarLeaving(true);
+      window.setTimeout(() => {
+        setSnackbarMessage("");
+        setIsSnackbarLeaving(false);
+      }, 220);
+    }, 3300);
+    return () => window.clearTimeout(timeoutId);
+  }, [workspace.reviewError]);
 
   return (
     <section className="editor">
@@ -266,6 +285,28 @@ export function SeoReviewForm({ workspace }: SeoReviewFormProps) {
           </div>
         </div>
       </div>
+      {snackbarMessage ? (
+        <div
+          className={isSnackbarLeaving ? "snackbar snackbar--error snackbar--leave" : "snackbar snackbar--error"}
+          role="alert"
+          aria-live="assertive"
+        >
+          <p>{snackbarMessage}</p>
+          <button
+            type="button"
+            className="snackbar__close"
+            onClick={() => {
+              setIsSnackbarLeaving(true);
+              window.setTimeout(() => {
+                setSnackbarMessage("");
+                setIsSnackbarLeaving(false);
+              }, 220);
+            }}
+          >
+            {t("common.actions.close")}
+          </button>
+        </div>
+      ) : null}
     </section>
   );
 }
