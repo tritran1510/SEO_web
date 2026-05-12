@@ -27,21 +27,49 @@ async function parseResponse<T>(response: Response): Promise<ApiEnvelope<T> | nu
   }
 }
 
+function isSuccessPayload<T>(payload: ApiEnvelope<T> | null): payload is ApiEnvelope<T> & { data: T } {
+  return payload?.status === "success" && payload.data !== undefined;
+}
+
+function buildPaginationQuery(page: number, pageSize: number): string {
+  const params = new URLSearchParams({
+    page: String(page),
+    pageSize: String(pageSize),
+  });
+  return params.toString();
+}
+
+function extractErrorMessage<T>(
+  response: Response,
+  payload: ApiEnvelope<T> | null,
+  fallback: string,
+): string {
+  if (payload?.message?.trim()) {
+    return payload.message;
+  }
+
+  if (response.status === 413) {
+    return "Request body exceeds maximum allowed size of 50MB.";
+  }
+
+  return fallback;
+}
+
 export async function requestSeoReview(input: ArticleFormData): Promise<ReviewReport> {
   const response = await fetch(createApiUrl("/review"), {
     method: "POST",
     headers: {
+      Accept: "application/json",
       "Content-Type": "application/json",
     },
     body: JSON.stringify(input),
   });
 
   const payload = await parseResponse<ReviewReport>(response);
-  if (!response.ok || !payload?.data) {
-    throw new Error(payload?.message || "Could not generate the SEO review.");
+  if (!response.ok || !isSuccessPayload(payload)) {
+    throw new Error(extractErrorMessage(response, payload, "Could not generate the SEO review."));
   }
 
-  // The backend returns an envelope so the frontend can reuse the same success/error shape everywhere.
   return payload.data;
 }
 
@@ -49,11 +77,15 @@ export async function fetchReviewedArticles(
   page = 1,
   pageSize = 10,
 ): Promise<ReviewedArticlesResponse> {
-  const response = await fetch(createApiUrl(`/reviews?page=${page}&pageSize=${pageSize}`));
+  const response = await fetch(createApiUrl(`/reviews?${buildPaginationQuery(page, pageSize)}`), {
+    headers: {
+      Accept: "application/json",
+    },
+  });
 
   const payload = await parseResponse<ReviewedArticlesResponse>(response);
-  if (!response.ok || !payload?.data) {
-    throw new Error(payload?.message || "Could not fetch reviewed articles.");
+  if (!response.ok || !isSuccessPayload(payload)) {
+    throw new Error(extractErrorMessage(response, payload, "Could not fetch reviewed articles."));
   }
 
   return payload.data;
@@ -64,11 +96,18 @@ export async function fetchReviewHistory(
   page = 1,
   pageSize = 20,
 ): Promise<ReviewHistoryResponse> {
-  const response = await fetch(createApiUrl(`/reviews/${articleId}?page=${page}&pageSize=${pageSize}`));
+  const response = await fetch(
+    createApiUrl(`/reviews/${articleId}?${buildPaginationQuery(page, pageSize)}`),
+    {
+      headers: {
+        Accept: "application/json",
+      },
+    },
+  );
 
   const payload = await parseResponse<ReviewHistoryResponse>(response);
-  if (!response.ok || !payload?.data) {
-    throw new Error(payload?.message || "Could not fetch review history.");
+  if (!response.ok || !isSuccessPayload(payload)) {
+    throw new Error(extractErrorMessage(response, payload, "Could not fetch review history."));
   }
 
   return payload.data;
